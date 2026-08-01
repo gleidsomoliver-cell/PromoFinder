@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromoFinder - As Melhores Ofertas</title>
+    <!-- Ícones do Lucide Icons (para os símbolos de tag, lua, coração, etc) -->
+    <script src="[unpkg.com](https://unpkg.com/lucide@latest)"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- CABEÇALHO (HEADER) -->
+    <header class="header">
+        <div class="container header-container">
+            
+            <!-- Logo com Ícone -->
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="tag"></i>
+                </div>
+                <h2>Promo<span>Finder</span></h2>
+            </a>
+
+            <!-- Menu de Navegação -->
+            <nav class="menu">
+                <a href="#" class="active">Início</a>
+                <a href="#">Categorias</a>
+                <a href="#">Lojas</a>
+                <a href="#">Cupons</a>
+                <a href="#">Blog</a>
+            </nav>
+
+            <!-- Ações do Canto Direito (Tema, Favoritos, Login) -->
+            <div class="header-actions">
+                <button class="icon-btn" title="Alternar Tema">
+                    <i data-lucide="moon"></i>
+                </button>
+
+                <button class="icon-btn favorites-btn" title="Favoritos">
+                    <i data-lucide="heart"></i>
+                    <span>Favoritos</span>
+                </button>
+
+                <button class="btn-login">Entrar</button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- SEÇÃO PRINCIPAL (HERO) -->
+    <section class="hero">
+        <div class="container hero-container">
+            
+            <!-- Texto e Busca -->
+            <div class="hero-text">
+                <span class="badge">
+                    <i data-lucide="flame"></i> Promoções Atualizadas Todos os Dias
+                </span>
+                
+                <h1>
+                    Encontre as melhores
+                    <span>promoções</span>
+                    em um só lugar!
+                </h1>
+
+                <p>
+                    Buscamos nas principais lojas para você economizar tempo e dinheiro. 
+                    Aproveite as ofertas do dia, cupons exclusivos e os menores preços.
+                </p>
+
+                <!-- Caixa de Busca -->
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="Digite o produto que você procura...">
+                    <button>Buscar</button>
+                </div>
+                
+                <!-- Benefícios em Destaque -->
+                <div class="beneficios">
+                    <div><i data-lucide="store"></i> As melhores lojas</div>
+                    <div><i data-lucide="link-2"></i> Links de afiliado</div>
+                    <div><i data-lucide="zap"></i> Ofertas atualizadas</div>
+                    <div><i data-lucide="shield-check"></i> 100% Gratuito</div>
+                </div>
+            </div>
+
+            <!-- Ilustração 3D / Imagem -->
+            <div class="hero-image">
+                <!-- Coloque a sua imagem na pasta imagens/carrinho.png -->
+                <img src="imagens/carrinho.png" alt="Carrinho de Ofertas PromoFinder">
+            </div>
+
+        </div>
+    </section>
+
+      <!-- SEÇÃO DE CONTEÚDO PRINCIPAL (CATEGORIAS + OFERTAS) -->
+    <main class="main-content container">
+        
+        <!-- BARRA LATERAL: CATEGORIAS -->
+        <aside class="sidebar">
+            <div class="card-categories">
+                <h3>Categorias</h3>
+                <ul class="category-list">
+                    <li>
+                        <a href="#" class="active">
+                            <i data-lucide="tv"></i> Eletrônicos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="laptop"></i> Informática
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="smartphone"></i> Celulares
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="home"></i> Casa e Decoração
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="shirt"></i> Moda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="sparkles"></i> Beleza e Saúde
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i data-lucide="dumbbell"></i> Esportes
+                        </a>
+                    </li>
+                </ul>
+                <button class="btn-all-categories">Ver todas</button>
+            </div>
+        </aside>
+
+        <!-- ÁREA DIREITA: OFERTAS EM DESTAQUE -->
+        <section class="offers-section">
+            
+            <div class="offers-header">
+                <h2>Ofertas em destaque 🔥</h2>
+                <a href="#" class="btn-view-all">Ver todas as ofertas</a>
+            </div>
+
+            <!-- GRID DE CARDS DE PRODUTOS -->
+            <div class="offers-grid">
+
+                <!-- CARD 1: Notebook -->
+                <div class="product-card">
+                    <div class="card-top">
+                        <span class="discount-badge">-20%</span>
+                        <button class="fav-btn"><i data-lucide="heart"></i></button>
+                    </div>
+                    <div class="product-img">
+                        <img src="[m.media-amazon.com](https://m.media-amazon.com/images/I/71p0WjO0+7L._AC_SL1500_.jpg)" alt="Notebook Gamer Acer Nitro 5">
+                    </div>
+                    <div class="product-info">
+                        <h4>Notebook Gamer Acer Nitro 5</h4>
+                        <div class="store-tags">
+                            <span class="store-badge amazon">amazon</span>
+                            <span class="store-badge magalu">Magalu</span>
+                        </div>
+                        <div class="price-box">
+                            <div class="prices">
+                                <span class="current-price">R$ 3.999,00</span>
+                                <span class="old-price">R$ 4.999,00</span>
+                            </div>
+                            <span class="price-label">Menor preço encontrado</span>
+                        </div>
+                        <a href="#" class="btn-offer">
+                            Ver oferta <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 2: iPhone -->
+                <div class="product-card">
+                    <div class="card-top">
+                        <span class="discount-badge">-15%</span>
+                        <button class="fav-btn"><i data-lucide="heart"></i></button>
+                    </div>
+                    <div class="product-img">
+                        <img src="[m.media-amazon.com](https://m.media-amazon.com/images/I/71d7rfSl0wL._AC_SL1500_.jpg)" alt="iPhone 15 128GB">
+                    </div>
+                    <div class="product-info">
+                        <h4>iPhone 15 128GB</h4>
+                        <div class="store-tags">
+                            <span class="store-badge ml">mercado livre</span>
+                            <span class="store-badge amazon">amazon</span>
+                        </div>
+                        <div class="price-box">
+                            <div class="prices">
+                                <span class="current-price">R$ 5.599,00</span>
+                                <span class="old-price">R$ 6.599,00</span>
+                            </div>
+                            <span class="price-label">Menor preço encontrado</span>
+                        </div>
+                        <a href="#" class="btn-offer">
+                            Ver oferta <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 3: Fone Sony -->
+                <div class="product-card">
+                    <div class="card-top">
+                        <span class="discount-badge">-30%</span>
+                        <button class="fav-btn"><i data-lucide="heart"></i></button>
+                    </div>
+                    <div class="product-img">
+                        <img src="[m.media-amazon.com](https://m.media-amazon.com/images/I/51SKmu2G5FL._AC_SL1200_.jpg)" alt="Headphone Sony WH-1000XM5">
+                    </div>
+                    <div class="product-info">
+                        <h4>Headphone Sony WH-1000XM5</h4>
+                        <div class="store-tags">
+                            <span class="store-badge amazon">amazon</span>
+                            <span class="store-badge kabum">KaBuM!</span>
+                        </div>
+                        <div class="price-box">
+                            <div class="prices">
+                                <span class="current-price">R$ 1.259,00</span>
+                                <span class="old-price">R$ 1.799,00</span>
+                            </div>
+                            <span class="price-label">Menor preço encontrado</span>
+                        </div>
+                        <a href="#" class="btn-offer">
+                            Ver oferta <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD 4: Smartwatch -->
+                <div class="product-card">
+                    <div class="card-top">
+                        <span class="discount-badge">-25%</span>
+                        <button class="fav-btn"><i data-lucide="heart"></i></button>
+                    </div>
+                    <div class="product-img">
+                        <img src="[m.media-amazon.com](https://m.media-amazon.com/images/I/61N43n7l57L._AC_SL1500_.jpg)" alt="Smartwatch Galaxy Watch 6">
+                    </div>
+                    <div class="product-info">
+                        <h4>Smartwatch Galaxy Watch 6</h4>
+                        <div class="store-tags">
+                            <span class="store-badge magalu">Magalu</span>
+                            <span class="store-badge amazon">amazon</span>
+                        </div>
+                        <div class="price-box">
+                            <div class="prices">
+                                <span class="current-price">R$ 1.049,00</span>
+                                <span class="old-price">R$ 1.399,00</span>
+                            </div>
+                            <span class="price-label">Menor preço encontrado</span>
+                        </div>
+                        <a href="#" class="btn-offer">
+                            Ver oferta <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BANNER DE CAPTURA DE E-MAIL / NEWSLETTER -->
+    <section class="newsletter-section container">
+        <div class="newsletter-box">
+            <div class="newsletter-icon">
+                <i data-lucide="bell"></i>
+            </div>
+            <div class="newsletter-text">
+                <h3>Receba as melhores promoções no seu e-mail!</h3>
+                <p>Cadastre-se e não perca nenhuma oferta imperdível.</p>
+            </div>
+            <form class="newsletter-form" onsubmit="event.preventDefault();">
+                <input type="email" placeholder="Seu melhor e-mail" required>
+                <button type="submit">Quero receber!</button>
+            </form>
+        </div>
+    </section>
+
+         </aside>
+     </main>
+
+    <!-- Script para carregar os ícones automaticamente -->
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="js/script.js"></script>
+<!-- Scripts dos icones -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
+<script src="js/script.js"></script>
+
+</body>
+</html>
