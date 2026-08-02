@@ -605,3 +605,498 @@ body {
 .newsletter-form button:hover {
     background: #6D28D9;
 }
+
+
+/* ================= RESPONSIVIDADE (CELULAR E TABLET) ================= */
+
+/* Telas até 1024px (Tablets) */
+@media (max-width: 1024px) {
+    .hero-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .search-box {
+        margin: 0 auto 30px auto;
+    }
+
+    .beneficios {
+        justify-content: center;
+    }
+
+    .main-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Telas até 768px (Celulares) */
+@media (max-width: 768px) {
+    .header-container {
+        gap: 12px;
+    }
+
+    /* Esconde os links do menu em telas pequenas para não poluir */
+    .menu {
+        display: none;
+    }
+
+    .hero {
+        padding: 40px 0;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .search-box {
+        flex-direction: column;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .search-box button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .search-icon {
+        display: none;
+    }
+
+    .offers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+    }
+
+    .product-card {
+        padding: 12px;
+    }
+
+    .product-img {
+        height: 120px;
+    }
+
+    .newsletter-box {
+        flex-direction: column;
+        padding: 24px 20px;
+        text-align: center;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .newsletter-form button {
+        width: 100%;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+/* ================= PÁGINAS SECUNDÁRIAS (CUPONS E LOJAS) ================= */
+.page-hero {
+    background: radial-gradient(circle at top center, #2E1065 0%, #070714 70%);
+    padding: 60px 0 40px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.page-hero h1 {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.page-hero h1 span {
+    color: #FACC15;
+}
+
+.page-hero p {
+    color: #A1A1AA;
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto 24px auto;
+}
+
+.page-search {
+    margin: 0 auto;
+}
+
+.page-content {
+    padding: 40px 0 80px 0;
+}
+
+/* Filtros de Cupons */
+.filter-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.pill-btn {
+    background: #0D0C22;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #A1A1AA;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.pill-btn:hover, .pill-btn.active {
+    background: #7C3AED;
+    color: white;
+    border-color: #7C3AED;
+}
+
+/* Grid de Cupons */
+.coupons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.coupon-card {
+    background: #0D0C22;
+    border: 1px dashed rgba(124, 58, 237, 0.4);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    transition: transform 0.2s ease;
+}
+
+.coupon-card:hover {
+    transform: translateY(-4px);
+    border-color: #8B5CF6;
+}
+
+.coupon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.discount-tag {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.coupon-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+.coupon-card p {
+    font-size: 13px;
+    color: #A1A1AA;
+}
+
+.coupon-code-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #18182C;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.coupon-code-box code {
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #FACC15;
+    letter-spacing: 1px;
+}
+
+.btn-copy {
+    background: #7C3AED;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-copy:hover {
+    background: #6D28D9;
+}
+
+.coupon-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #71717A;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 10px;
+}
+
+.coupon-footer .verified {
+    color: #10B981;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Grid de Lojas */
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.store-card {
+    background: #0D0C22;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.store-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(124, 58, 237, 0.4);
+}
+
+.store-icon {
+    background: #7C3AED;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.store-card h3 {
+    font-size: 18px;
+    color: white;
+}
+
+.offer-count {
+    font-size: 12px;
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.store-card p {
+    font-size: 13px;
+    color: #A1A1AA;
+    line-height: 1.4;
+}
+
+.store-card .btn-offer {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Esconde o botão do menu hambúrguer no computador */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 6px;
+}
+
+/* Mostra o botão APENAS quando a tela for menor que 768px (celulares) */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .menu {
+        display: none; /* Esconde os links normais no celular */
+    }
+
+    .menu.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #0B0A1E;
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 16px;
+    }
+}
+
+/* ================= MODO CLARO (LIGHT MODE) ================= */
+body.light-mode {
+    background-color: #F4F4F5;
+    color: #18181B;
+}
+
+body.light-mode .header {
+    background-color: #FFFFFF;
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .logo h2 {
+    color: #18181B;
+}
+
+body.light-mode .menu a {
+    color: #52525B;
+}
+
+body.light-mode .menu a:hover,
+body.light-mode .menu a.active {
+    color: #7C3AED;
+}
+
+body.light-mode .hero {
+    background: radial-gradient(circle at top right, #E9D5FF 0%, #F4F4F5 65%);
+}
+
+body.light-mode .hero h1 {
+    color: #18181B;
+}
+
+body.light-mode .hero p,
+body.light-mode .beneficios div {
+    color: #52525B;
+}
+
+body.light-mode .badge {
+    background: rgba(124, 58, 237, 0.1);
+    color: #6D28D9;
+    border-color: rgba(124, 58, 237, 0.2);
+}
+
+body.light-mode .card-categories,
+body.light-mode .product-card,
+body.light-mode .coupon-card,
+body.light-mode .store-card,
+body.light-mode .newsletter-box {
+    background: #FFFFFF;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .category-list a {
+    color: #52525B;
+}
+
+body.light-mode .category-list a:hover,
+body.light-mode .category-list a.active {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7C3AED;
+}
+
+body.light-mode .product-info h4,
+body.light-mode .card-categories h3,
+body.light-mode .newsletter-text h3,
+body.light-mode .coupon-card h3,
+body.light-mode .store-card h3 {
+    color: #18181B;
+}
+
+body.light-mode .product-img {
+    background: #F4F4F5;
+}
+
+body.light-mode .footer {
+    background: #E4E4E7;
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .footer-col h4 {
+    color: #18181B;
+}
+
+body.light-mode .footer-col a,
+body.light-mode .footer-col.main-col p,
+body.light-mode .footer-bottom p {
+    color: #52525B;
+}
+
+body.light-mode .icon-btn {
+    color: #52525B;
+}
+
+body.light-mode .icon-btn:hover {
+    color: #18181B;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Ajuste de visibilidade dos ícones nos botões */
+.icon-btn svg,
+.icon-btn i {
+    width: 20px;
+    height: 20px;
+    stroke: #A1A1AA;
+    display: block;
+}
+
+.icon-btn:hover svg,
+.icon-btn:hover i {
+    stroke: #FFFFFF;
+}
+
+body.light-mode .icon-btn svg,
+body.light-mode .icon-btn i {
+    stroke: #52525B;
+}
+
+body.light-mode .icon-btn:hover svg,
+body.light-mode .icon-btn:hover i {
+    stroke: #18181B;
+}

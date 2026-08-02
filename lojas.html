@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lojas Parceiras - PromoFinder</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i data-lucide="tag"></i></div>
+                <h2>Promo<span>Finder</span></h2>
+            </a>
+
+            <nav class="menu">
+                <a href="index.html">Início</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="lojas.html" class="active">Lojas</a>
+                <a href="cupons.html">Cupons</a>
+                <a href="#">Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <button id="theme-btn" class="icon-btn" title="Alternar Tema">
+    <i data-lucide="moon"></i>
+</button>              
+                <button class="icon-btn favorites-btn" title="Favoritos">
+                    <i data-lucide="heart"></i>
+                    <span>Favoritos</span>
+                </button>
+                <button class="btn-login">Entrar</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO DA PÁGINA DE LOJAS -->
+    <section class="page-hero">
+        <div class="container text-center">
+            <span class="badge"><i data-lucide="store"></i> Lojas Confiáveis</span>
+            <h1>Lojas <span>Parceiras</span></h1>
+            <p>Explore as melhores ofertas e cupons das maiores lojas e e-commerces do Brasil.</p>
+        </div>
+    </section>
+
+    <!-- GRID DE LOJAS -->
+    <main class="container page-content">
+        <div class="stores-grid">
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="shopping-bag"></i></div>
+                <h3>Amazon Brasil</h3>
+                <span class="offer-count">1.250+ ofertas ativas</span>
+                <p>Eletrônicos, livros, casa e mais com entrega rápida.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="package"></i></div>
+                <h3>Mercado Livre</h3>
+                <span class="offer-count">2.100+ ofertas ativas</span>
+                <p>A maior variedade de produtos e vendedores com Frete Full.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="smartphone"></i></div>
+                <h3>Shopee</h3>
+                <span class="offer-count">3.400+ ofertas ativas</span>
+                <p>Cupons diários de frete grátis e super ofertas relâmpago.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="tv"></i></div>
+                <h3>Magazine Luiza</h3>
+                <span class="offer-count">980+ ofertas ativas</span>
+                <p>Eletrodomésticos, celulares, móveis e tecnologia.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="cpu"></i></div>
+                <h3>KaBuM!</h3>
+                <span class="offer-count">650+ ofertas ativas</span>
+                <p>O maior e-commerce de tecnologia, hardware e e-sports.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+            <div class="store-card">
+                <div class="store-icon"><i data-lucide="globe"></i></div>
+                <h3>AliExpress</h3>
+                <span class="offer-count">4.500+ ofertas ativas</span>
+                <p>Importações com envio Choice rápido para o Brasil.</p>
+                <a href="index.html" class="btn-offer">Ver ofertas da loja</a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col main-col">
+                <div class="logo">
+                    <div class="logo-icon"><i data-lucide="tag"></i></div>
+                    <h2>Promo<span>Finder</span></h2>
+                </div>
+                <p>O seu agregador de ofertas inteligente. Encontre descontos e economize em todas as suas compras online.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="lojas.html">Lojas Parceiras</a></li>
+                    <li><a href="cupons.html">Cupons de Desconto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Privacidade</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Redes Sociais</h4>
+                <div class="social-links">
+                    <a href="#"><i data-lucide="instagram"></i></a>
+                    <a href="#"><i data-lucide="send"></i></a>
+                    <a href="#"><i data-lucide="message-circle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 PromoFinder. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
