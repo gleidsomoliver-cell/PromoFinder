@@ -1100,3 +1100,184 @@ body.light-mode .icon-btn:hover svg,
 body.light-mode .icon-btn:hover i {
     stroke: #18181B;
 }
+
+/* ================= MODAL DE LOGIN ================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 420px;
+    background: #111022;
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 20px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-header .logo-icon {
+    margin: 0 auto 12px auto;
+}
+
+.modal-header h2 {
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    font-size: 28px;
+}
+
+.modal-header h2 span {
+    color: #8B5CF6;
+}
+
+.modal-header p {
+    color: #A1A1AA;
+    font-size: 14px;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input {
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #18162E;
+    color: #FFFFFF;
+    padding: 0 14px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #7C3AED;
+}
+
+.btn-submit {
+    height: 46px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #7C3AED, #9333EA);
+    color: #FFFFFF;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    filter: brightness(1.08);
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+    background: #0B0A1E;
+    padding: 60px 0 20px;
+    margin-top: 60px;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.footer-col h4 {
+    color: #FFFFFF;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col a,
+.footer-col p {
+    color: #A1A1AA;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-col a:hover {
+    color: #8B5CF6;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.footer-bottom p {
+    color: #A1A1AA;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* ================= RESPONSIVO ================= */
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-card {
+        padding: 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 22px;
+    }
+}

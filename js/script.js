@@ -1,25 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // ----------------------------------------------------
-    // 1. ALTERNAR TEMA (MODO ESCURO / MODO CLARO)
-    // ----------------------------------------------------
+    // 1. ALTERNAR TEMA
     const themeBtn = document.getElementById('theme-btn');
-    const moonIcon = document.querySelector('.theme-icon-moon');
-    const sunIcon = document.querySelector('.theme-icon-sun');
 
     function applyTheme(isLight) {
         if (isLight) {
             document.body.classList.add('light-mode');
-            if (moonIcon) moonIcon.style.display = 'none';
-            if (sunIcon) sunIcon.style.display = 'inline-block';
         } else {
             document.body.classList.remove('light-mode');
-            if (moonIcon) moonIcon.style.display = 'inline-block';
-            if (sunIcon) sunIcon.style.display = 'none';
         }
     }
 
-    // Carrega o tema salvo no navegador
     if (localStorage.getItem('theme') === 'light') {
         applyTheme(true);
     }
@@ -33,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ----------------------------------------------------
     // 2. FAVORITAR PRODUTOS
-    // ----------------------------------------------------
     let favoritesCount = 0;
     const favHeaderCount = document.querySelector('.favorites-btn span');
     const favButtons = document.querySelectorAll('.fav-btn');
@@ -54,14 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (favHeaderCount) {
-                favHeaderCount.textContent = favoritesCount > 0 ? `Favoritos (${favoritesCount})` : 'Favoritos';
+                favHeaderCount.textContent =
+                    favoritesCount > 0 ? `Favoritos (${favoritesCount})` : 'Favoritos';
             }
         });
     });
 
-    // ----------------------------------------------------
     // 3. FILTRO DE BUSCA
-    // ----------------------------------------------------
     const searchInput = document.querySelector('.search-box input');
     const searchButton = document.querySelector('.search-box button');
     const productCards = document.querySelectorAll('.product-card');
@@ -71,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchTerm = searchInput.value.toLowerCase().trim();
 
         productCards.forEach(card => {
-            const title = card.querySelector('h4') ? card.querySelector('h4').textContent.toLowerCase() : '';
+            const titleElement = card.querySelector('h4');
+            const title = titleElement ? titleElement.textContent.toLowerCase() : '';
             card.style.display = title.includes(searchTerm) ? 'flex' : 'none';
         });
     }
@@ -79,32 +67,61 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) searchInput.addEventListener('input', filterProducts);
     if (searchButton) searchButton.addEventListener('click', filterProducts);
 
-    // ----------------------------------------------------
     // 4. MENU CELULAR
-    // ----------------------------------------------------
     const menuToggleBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.menu');
+
     if (menuToggleBtn && navMenu) {
         menuToggleBtn.addEventListener('click', () => {
             navMenu.classList.toggle('mobile-open');
         });
     }
 
-    // ----------------------------------------------------
     // 5. MODAL DE LOGIN
-    // ----------------------------------------------------
     const loginBtn = document.querySelector('.btn-login');
     const loginModal = document.getElementById('login-modal');
     const closeModalBtn = document.querySelector('.modal-close');
 
     if (loginBtn && loginModal) {
-        loginBtn.addEventListener('click', () => loginModal.classList.add('active'));
+        loginBtn.addEventListener('click', () => {
+            loginModal.classList.add('active');
+        });
     }
 
     if (closeModalBtn && loginModal) {
-        closeModalBtn.addEventListener('click', () => loginModal.classList.remove('active'));
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) loginModal.classList.remove('active');
+        closeModalBtn.addEventListener('click', () => {
+            loginModal.classList.remove('active');
         });
+
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+        });
+    }
+
+    // 6. FORMULÁRIOS
+    const newsletterForm = document.getElementById('newsletter-form');
+    const loginForm = document.getElementById('login-form');
+
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Inscrição realizada com sucesso!');
+        });
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login efetuado com sucesso!');
+            if (loginModal) {
+                loginModal.classList.remove('active');
+            }
+        });
+    }
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 });
