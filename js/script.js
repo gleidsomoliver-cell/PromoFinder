@@ -24,22 +24,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. FAVORITAR PRODUTOS
-    let favoritesCount = 0;
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let favoritesCount = favorites.length;
     const favHeaderCount = document.querySelector('.favorites-btn span');
     const favButtons = document.querySelectorAll('.fav-btn');
 
     favButtons.forEach(btn => {
+        const productCard = btn.closest('.product-card');
+const productName = productCard.querySelector('h4').textContent;
+
+if (favorites.includes(productName)) {
+    btn.classList.add('active');
+}
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const isFavorited = btn.classList.toggle('active');
 
-            if (isFavorited) {
-                favoritesCount++;
-                btn.style.color = '#EF4444';
-            } else {
-                favoritesCount--;
-                btn.style.color = '#71717A';
-            }
+           if (isFavorited) {
+    favorites.push(productName);
+    favoritesCount++;
+} else {
+    favorites = favorites.filter(item => item !== productName);
+    favoritesCount--;
+}
+
+localStorage.setItem('favorites', JSON.stringify(favorites)); 
 
             if (favHeaderCount) {
                 favHeaderCount.textContent =
