@@ -1,5 +1,6 @@
 const http = require('node:http');
-const offers = require('../js/offers-data.js');
+const localOffersAdapter = require('./adapters/localOffersAdapter.js');
+const { getOffers } = require('./services/offerService.js');
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
 
@@ -11,7 +12,7 @@ function sendJson(response, statusCode, data) {
     response.end(JSON.stringify(data));
 }
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
     try {
         if (request.method === 'OPTIONS') {
             response.writeHead(204, {
@@ -24,6 +25,8 @@ const server = http.createServer((request, response) => {
         }
 
         if (request.method === 'GET' && request.url === '/api/offers') {
+            const offers = await getOffers([localOffersAdapter]);
+
             sendJson(response, 200, offers);
             return;
         }
