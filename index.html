@@ -17,11 +17,11 @@
           <h2>Promo<span>Finder</span></h2>
         </a>
 
-        <button class="mobile-menu-btn" title="Abrir Menu">
+        <button class="mobile-menu-btn" type="button" title="Abrir menu" aria-label="Abrir menu" aria-controls="primary-navigation" aria-expanded="false">
           <i data-lucide="menu"></i>
         </button>
 
-        <nav class="menu">
+        <nav class="menu" id="primary-navigation">
           <a href="index.html" class="active">Início</a>
           <a href="#categorias">Categorias</a>
           <a href="lojas.html">Lojas</a>
@@ -128,127 +128,8 @@
           <a href="#" class="btn-view-all">Ver todas as ofertas</a>
         </div>
 
-        <div class="offers-grid">
-          <div class="product-card">
-            <div class="card-top">
-              <span class="discount-badge">-20%</span>
-              <button class="fav-btn"><i data-lucide="heart"></i></button>
-            </div>
-            <div class="product-img">
-              <img
-                src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop"
-                alt="Notebook Gamer Acer Nitro 5"
-              />
-            </div>
-            <div class="product-info">
-              <h4>Notebook Gamer Acer Nitro 5</h4>
-              <div class="store-tags">
-                <span class="store-badge amazon">Amazon</span>
-                <span class="store-badge magalu">Magalu</span>
-              </div>
-              <div class="price-box">
-                <div class="prices">
-                  <span class="current-price">R$ 3.999,00</span>
-                  <span class="old-price">R$ 4.999,00</span>
-                </div>
-                <span class="price-label">Menor preço encontrado</span>
-              </div>
-              <a href="#" class="btn-offer">
-                Ver oferta <i data-lucide="external-link"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="card-top">
-              <span class="discount-badge">-15%</span>
-              <button class="fav-btn"><i data-lucide="heart"></i></button>
-            </div>
-            <div class="product-img">
-              <img
-                src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop"
-                alt="iPhone 15 128GB"
-              />
-            </div>
-            <div class="product-info">
-              <h4>iPhone 15 128GB</h4>
-              <div class="store-tags">
-                <span class="store-badge ml">Mercado Livre</span>
-                <span class="store-badge amazon">Amazon</span>
-              </div>
-              <div class="price-box">
-                <div class="prices">
-                  <span class="current-price">R$ 5.599,00</span>
-                  <span class="old-price">R$ 6.599,00</span>
-                </div>
-                <span class="price-label">Menor preço encontrado</span>
-              </div>
-              <a href="#" class="btn-offer">
-                Ver oferta <i data-lucide="external-link"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="card-top">
-              <span class="discount-badge">-30%</span>
-              <button class="fav-btn"><i data-lucide="heart"></i></button>
-            </div>
-            <div class="product-img">
-              <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop"
-                alt="Headphone Sony WH-1000XM5"
-              />
-            </div>
-            <div class="product-info">
-              <h4>Headphone Sony WH-1000XM5</h4>
-              <div class="store-tags">
-                <span class="store-badge amazon">Amazon</span>
-                <span class="store-badge kabum">KaBuM!</span>
-              </div>
-              <div class="price-box">
-                <div class="prices">
-                  <span class="current-price">R$ 1.259,00</span>
-                  <span class="old-price">R$ 1.799,00</span>
-                </div>
-                <span class="price-label">Menor preço encontrado</span>
-              </div>
-              <a href="#" class="btn-offer">
-                Ver oferta <i data-lucide="external-link"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="card-top">
-              <span class="discount-badge">-25%</span>
-              <button class="fav-btn"><i data-lucide="heart"></i></button>
-            </div>
-            <div class="product-img">
-              <img
-                src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop"
-                alt="Smartwatch Galaxy Watch 6"
-              />
-            </div>
-            <div class="product-info">
-              <h4>Smartwatch Galaxy Watch 6</h4>
-              <div class="store-tags">
-                <span class="store-badge magalu">Magalu</span>
-                <span class="store-badge amazon">Amazon</span>
-              </div>
-              <div class="price-box">
-                <div class="prices">
-                  <span class="current-price">R$ 1.049,00</span>
-                  <span class="old-price">R$ 1.399,00</span>
-                </div>
-                <span class="price-label">Menor preço encontrado</span>
-              </div>
-              <a href="#" class="btn-offer">
-                Ver oferta <i data-lucide="external-link"></i>
-              </a>
-            </div>
-          </div>
-        </div>
+        <div class="offers-grid" id="offers-grid"></div>
+        <p class="no-results" id="no-results" role="status" hidden>Nenhuma oferta encontrada.</p>
       </section>
     </main>
 
@@ -323,9 +204,9 @@
         <div class="footer-col">
           <h4>Redes Sociais</h4>
           <div class="social-links">
-            <a href="#"><i data-lucide="camera"></i></a>
-            <a href="#"><i data-lucide="send"></i></a>
-            <a href="#"><i data-lucide="message-circle"></i></a>
+            <a href="" data-social="instagram" aria-label="Instagram" title="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="" data-social="telegram" aria-label="Telegram" title="Telegram"><i data-lucide="send"></i></a>
+            <a href="" data-social="whatsapp" aria-label="WhatsApp" title="WhatsApp"><i data-lucide="message-circle"></i></a>
           </div>
         </div>
       </div>
@@ -335,6 +216,7 @@
       </div>
     </footer>
 
+    <script src="js/offers-data.js"></script>
     <script src="js/script.js"></script>
   </body>
 </html>

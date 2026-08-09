@@ -19,11 +19,11 @@
       <h2>Promo<span>Finder</span></h2>
     </a>
 
-    <button class="mobile-menu-btn" title="Abrir Menu">
+    <button class="mobile-menu-btn" type="button" title="Abrir menu" aria-label="Abrir menu" aria-controls="primary-navigation" aria-expanded="false">
       <i data-lucide="menu"></i>
     </button>
 
-    <nav class="menu">
+    <nav class="menu" id="primary-navigation">
       <a href="index.html">Início</a>
       <a href="index.html#categorias">Categorias</a>
       <a href="lojas.html">Lojas</a>
@@ -76,7 +76,7 @@
 
       <p>10% de desconto em produtos selecionados.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="AMZ10">Copiar Cupom</button>
     </div>
 
     <div class="store-card">
@@ -90,7 +90,7 @@
 
       <p>R$20 OFF em compras acima de R$200.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="MELI20">Copiar Cupom</button>
     </div>
 
     <div class="store-card">
@@ -104,7 +104,7 @@
 
       <p>15% de desconto + Frete Grátis.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="SHOPEE15">Copiar Cupom</button>
     </div>
 
     <div class="store-card">
@@ -118,7 +118,7 @@
 
       <p>R$100 OFF em eletrônicos selecionados.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="MAGA100">Copiar Cupom</button>
     </div>
 
     <div class="store-card">
@@ -132,7 +132,7 @@
 
       <p>5% OFF em hardware e periféricos.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="KABUM5">Copiar Cupom</button>
     </div>
 
     <div class="store-card">
@@ -146,7 +146,7 @@
 
       <p>US$30 OFF em compras internacionais.</p>
 
-      <a href="#" class="btn-offer">Copiar Cupom</a>
+      <button type="button" class="btn-offer btn-copy" data-coupon="ALI30">Copiar Cupom</button>
     </div>
 
   </div>
@@ -193,9 +193,9 @@
       <h4>Redes Sociais</h4>
 
       <div class="social-links">
-        <a href="#"><i data-lucide="instagram"></i></a>
-        <a href="#"><i data-lucide="send"></i></a>
-        <a href="#"><i data-lucide="message-circle"></i></a>
+        <a href="" data-social="instagram" aria-label="Instagram" title="Instagram"><i data-lucide="instagram"></i></a>
+        <a href="" data-social="telegram" aria-label="Telegram" title="Telegram"><i data-lucide="send"></i></a>
+        <a href="" data-social="whatsapp" aria-label="WhatsApp" title="WhatsApp"><i data-lucide="message-circle"></i></a>
       </div>
     </div>
 
