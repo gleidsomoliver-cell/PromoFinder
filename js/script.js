@@ -1,4 +1,5 @@
-const OFFERS_API_URL = 'http://localhost:3000/api/offers';
+const OFFERS_API_URL = 'https://promofinder-api.onrender.com/api/offers';
+const OFFERS_API_TIMEOUT_MS = 8000;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. DADOS E INTERFACE DE OFERTAS
@@ -75,8 +76,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function loadOffers() {
+        const requestController = new AbortController();
+        const requestTimeout = setTimeout(() => requestController.abort(), OFFERS_API_TIMEOUT_MS);
+
         try {
-            const response = await fetch(OFFERS_API_URL);
+            const response = await fetch(OFFERS_API_URL, {
+                signal: requestController.signal
+            });
 
             if (!response.ok) {
                 throw new Error(`Erro HTTP ${response.status}`);
@@ -94,6 +100,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             console.warn('A API de ofertas não respondeu. Os dados locais foram utilizados como fallback.', error);
             renderOffers(localOffers);
+        } finally {
+            clearTimeout(requestTimeout);
         }
     }
 
@@ -335,50 +343,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (window.innerWidth > 768) {
                 closeMobileMenu();
-            }
-        });
-    }
-
-    // 5. MODAL DE LOGIN
-    const loginBtn = document.querySelector('.btn-login');
-    const loginModal = document.getElementById('login-modal');
-    const closeModalBtn = document.querySelector('.modal-close');
-
-    if (loginBtn && loginModal) {
-        loginBtn.addEventListener('click', () => {
-            loginModal.classList.add('active');
-        });
-    }
-
-    if (closeModalBtn && loginModal) {
-        closeModalBtn.addEventListener('click', () => {
-            loginModal.classList.remove('active');
-        });
-
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                loginModal.classList.remove('active');
-            }
-        });
-    }
-
-    // 6. FORMULÁRIOS
-    const newsletterForm = document.getElementById('newsletter-form');
-    const loginForm = document.getElementById('login-form');
-
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Inscrição realizada com sucesso!');
-        });
-    }
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Login efetuado com sucesso!');
-            if (loginModal) {
-                loginModal.classList.remove('active');
             }
         });
     }

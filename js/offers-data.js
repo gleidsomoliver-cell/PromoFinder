@@ -58,6 +58,21 @@ const promoFinderOffers = [
         couponCode: null,
         couponExpiry: null,
         available: true
+    },
+    {
+        id: 'kit-gamer-acer-nitro-5-ryzen-5-rtx-3050',
+        name: 'Kit Gamer Completo Notebook Acer Nitro 5 AMD Ryzen 5 RTX 3050 Linux Gutta 8GB 512GB SSD 15,6" Full HD',
+        store: ['Shopee'],
+        category: 'Informática',
+        price: 'R$ 7.999,00',
+        oldPrice: null,
+        discount: null,
+        image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop',
+        productUrl: null,
+        affiliateUrl: 'https://s.shopee.com.br/4qElodtdS1',
+        couponCode: null,
+        couponExpiry: null,
+        available: true
     }
 ];
 

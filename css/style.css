@@ -109,22 +109,6 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-login {
-    background: #7C3AED;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.btn-login:hover {
-    background: #6D28D9;
-}
-
 .mobile-menu-btn {
     display: none;
     background: transparent;
@@ -359,22 +343,6 @@ body {
     font-weight: 700;
 }
 
-.btn-view-all {
-    color: #8B5CF6;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    background: rgba(124, 58, 237, 0.1);
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    transition: all 0.2s ease;
-}
-
-.btn-view-all:hover {
-    background: rgba(124, 58, 237, 0.25);
-}
-
 /* Grid de Produtos */
 .offers-grid {
     display: grid;
@@ -588,89 +556,6 @@ body {
     background: #6D28D9;
 }
 
-/* NEWSLETTER */
-.newsletter-section {
-    margin: 40px auto 80px auto;
-}
-
-.newsletter-box {
-    background: #0B0A1E;
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    border-radius: 20px;
-    padding: 30px 40px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
-
-.newsletter-icon {
-    background: #7C3AED;
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    flex-shrink: 0;
-}
-
-.newsletter-icon i {
-    width: 28px;
-    height: 28px;
-}
-
-.newsletter-text {
-    flex: 1;
-}
-
-.newsletter-text h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.newsletter-text p {
-    font-size: 14px;
-    color: #A1A1AA;
-}
-
-.newsletter-form {
-    display: flex;
-    gap: 10px;
-    flex: 1;
-    max-width: 450px;
-}
-
-.newsletter-form input {
-    flex: 1;
-    background: #18182C;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: white;
-    font-size: 14px;
-    outline: none;
-}
-
-.newsletter-form button {
-    background: #7C3AED;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    white-space: nowrap;
-}
-
-.newsletter-form button:hover {
-    background: #6D28D9;
-}
-
-
 /* ================= RESPONSIVIDADE (CELULAR E TABLET) ================= */
 
 /* Telas até 1024px (Tablets) */
@@ -753,17 +638,12 @@ body {
         gap: 8px;
     }
 
-    .header-actions .icon-btn,
-    .header-actions .btn-login {
+    .header-actions .icon-btn {
         min-height: 44px;
     }
 
     .header-actions .icon-btn {
         padding: 8px 10px;
-    }
-
-    .header-actions .btn-login {
-        padding: 10px 18px;
     }
 
     .menu {
@@ -894,22 +774,6 @@ body {
 
     .page-hero h1 {
         font-size: 32px;
-    }
-
-    .newsletter-box {
-        flex-direction: column;
-        padding: 24px 20px;
-        text-align: center;
-    }
-
-    .newsletter-form {
-        flex-direction: column;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .newsletter-form button {
-        width: 100%;
     }
 
     .footer-container {
@@ -1204,8 +1068,7 @@ body.light-mode .badge {
 body.light-mode .card-categories,
 body.light-mode .product-card,
 body.light-mode .coupon-card,
-body.light-mode .store-card,
-body.light-mode .newsletter-box {
+body.light-mode .store-card {
     background: #FFFFFF;
     border-color: rgba(0, 0, 0, 0.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -1223,7 +1086,6 @@ body.light-mode .category-list a.active {
 
 body.light-mode .product-info h4,
 body.light-mode .card-categories h3,
-body.light-mode .newsletter-text h3,
 body.light-mode .coupon-card h3,
 body.light-mode .store-card h3 {
     color: #18181B;
@@ -1281,114 +1143,6 @@ body.light-mode .icon-btn:hover i {
     stroke: #18181B;
 }
 
-/* ================= MODAL DE LOGIN ================= */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 20px;
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-.modal-card {
-    width: 100%;
-    max-width: 420px;
-    background: #111022;
-    border: 1px solid rgba(124, 58, 237, 0.25);
-    border-radius: 20px;
-    padding: 24px;
-    position: relative;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-}
-
-.modal-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.modal-header .logo-icon {
-    margin: 0 auto 12px auto;
-}
-
-.modal-header h2 {
-    color: #FFFFFF;
-    margin-bottom: 8px;
-    font-size: 28px;
-}
-
-.modal-header h2 span {
-    color: #8B5CF6;
-}
-
-.modal-header p {
-    color: #A1A1AA;
-    font-size: 14px;
-}
-
-.modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-group label {
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.form-group input {
-    height: 44px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: #18162E;
-    color: #FFFFFF;
-    padding: 0 14px;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: #7C3AED;
-}
-
-.btn-submit {
-    height: 46px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #7C3AED, #9333EA);
-    color: #FFFFFF;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-submit:hover {
-    filter: brightness(1.08);
-}
-
-.modal-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: transparent;
-    border: none;
-    color: #FFFFFF;
-    cursor: pointer;
-}
-
 /* ================= FOOTER ================= */
 .footer {
     background: #0B0A1E;
@@ -1398,7 +1152,7 @@ body.light-mode .icon-btn:hover i {
 
 .footer-container {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
     gap: 30px;
 }
 
@@ -1429,36 +1183,6 @@ body.light-mode .icon-btn:hover i {
     color: #8B5CF6;
 }
 
-.social-links {
-    display: flex;
-    gap: 10px;
-}
-
-.social-links a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-}
-
-.social-links a:hover,
-.social-links a:focus-visible {
-    color: #FFFFFF;
-    background: rgba(124, 58, 237, 0.2);
-    border-color: rgba(139, 92, 246, 0.6);
-    outline: none;
-}
-
-.social-links svg,
-.social-links i {
-    width: 20px;
-    height: 20px;
-}
-
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     margin-top: 30px;
@@ -1483,13 +1207,55 @@ body.light-mode .icon-btn:hover i {
         grid-template-columns: 1fr;
     }
 
-    .modal-card {
-        padding: 20px;
-    }
+}
 
-    .modal-header h2 {
-        font-size: 22px;
-    }
+.footer-bottom .affiliate-disclosure {
+    max-width: 860px;
+    margin: 0 auto 12px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ================= PÁGINAS LEGAIS ================= */
+.legal-hero {
+    padding-bottom: 32px;
+}
+
+.legal-content {
+    max-width: 900px;
+}
+
+.legal-content section {
+    margin-bottom: 32px;
+}
+
+.legal-content h2 {
+    margin-bottom: 12px;
+    color: #FFFFFF;
+    font-size: 22px;
+}
+
+.legal-content p {
+    margin-bottom: 12px;
+    color: #A1A1AA;
+    line-height: 1.75;
+}
+
+.legal-updated {
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.light-mode .legal-content h2 {
+    color: #18181B;
+}
+
+body.light-mode .legal-content p {
+    color: #52525B;
+}
+
+body.light-mode .legal-updated {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
 }
 
 @keyframes heart-pop {

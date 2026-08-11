@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PromoFinder - As Melhores Ofertas</title>
+    <title>PromoFinder | Ofertas e cupons em um só lugar</title>
+    <meta name="description" content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
+    <link rel="canonical" href="https://gleidsomoliver-cell.github.io/PromoFinder/" />
+    <meta property="og:title" content="PromoFinder | Ofertas e cupons em um só lugar" />
+    <meta property="og:description" content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gleidsomoliver-cell.github.io/PromoFinder/" />
    <script src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.js"></script>
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -26,7 +32,6 @@
           <a href="#categorias">Categorias</a>
           <a href="lojas.html">Lojas</a>
           <a href="cupons.html">Cupons</a>
-          <a href="#">Blog</a>
         </nav>
 
         <div class="header-actions">
@@ -39,7 +44,6 @@
             <span>Favoritos</span>
           </button>
 
-          <button class="btn-login">Entrar</button>
         </div>
       </div>
     </header>
@@ -125,51 +129,12 @@
       <section class="offers-section">
         <div class="offers-header">
           <h2>Ofertas em destaque 🔥</h2>
-          <a href="#" class="btn-view-all">Ver todas as ofertas</a>
         </div>
 
         <div class="offers-grid" id="offers-grid"></div>
         <p class="no-results" id="no-results" role="status" hidden>Nenhuma oferta encontrada.</p>
       </section>
     </main>
-
-    <section class="newsletter-section container">
-      <div class="newsletter-box">
-        <div class="newsletter-icon">
-          <i data-lucide="bell"></i>
-        </div>
-        <div class="newsletter-text">
-          <h3>Receba as melhores promoções no seu e-mail!</h3>
-          <p>Cadastre-se e não perca nenhuma oferta imperdível.</p>
-        </div>
-        <form class="newsletter-form" id="newsletter-form">
-          <input type="email" placeholder="Seu melhor e-mail" required />
-          <button type="submit">Quero receber!</button>
-        </form>
-      </div>
-    </section>
-
-    <div class="modal-overlay" id="login-modal">
-      <div class="modal-card">
-        <button class="modal-close"><i data-lucide="x"></i></button>
-        <div class="modal-header">
-          <div class="logo-icon"><i data-lucide="tag"></i></div>
-          <h2>Entrar no <span>PromoFinder</span></h2>
-          <p>Acesse sua conta para salvar favoritos e receber alertas.</p>
-        </div>
-        <form class="modal-form" id="login-form">
-          <div class="form-group">
-            <label>E-mail</label>
-            <input type="email" placeholder="seu@email.com" required />
-          </div>
-          <div class="form-group">
-            <label>Senha</label>
-            <input type="password" placeholder="••••••••" required />
-          </div>
-          <button type="submit" class="btn-submit">Entrar</button>
-        </form>
-      </div>
-    </div>
 
     <footer class="footer">
       <div class="container footer-container">
@@ -188,7 +153,7 @@
           <h4>Navegação</h4>
           <ul>
             <li><a href="index.html">Início</a></li>
-            <li><a href="lojas.html">Lojas Parceiras</a></li>
+            <li><a href="lojas.html">Lojas com Ofertas</a></li>
             <li><a href="cupons.html">Cupons de Desconto</a></li>
           </ul>
         </div>
@@ -196,22 +161,14 @@
         <div class="footer-col">
           <h4>Legal</h4>
           <ul>
-            <li><a href="#">Termos de Uso</a></li>
-            <li><a href="#">Política de Privacidade</a></li>
+            <li><a href="termos.html">Termos de Uso</a></li>
+            <li><a href="privacidade.html">Política de Privacidade</a></li>
           </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Redes Sociais</h4>
-          <div class="social-links">
-            <a href="" data-social="instagram" aria-label="Instagram" title="Instagram"><i data-lucide="instagram"></i></a>
-            <a href="" data-social="telegram" aria-label="Telegram" title="Telegram"><i data-lucide="send"></i></a>
-            <a href="" data-social="whatsapp" aria-label="WhatsApp" title="WhatsApp"><i data-lucide="message-circle"></i></a>
-          </div>
         </div>
       </div>
 
       <div class="footer-bottom container">
+        <p class="affiliate-disclosure">Transparência: O PromoFinder participa de programas de afiliados. Podemos receber uma comissão por compras realizadas através de alguns links, sem custo adicional para você.</p>
         <p>&copy; 2026 PromoFinder. Todos os direitos reservados.</p>
       </div>
     </footer>
