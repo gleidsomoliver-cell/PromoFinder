@@ -1,4 +1,7 @@
-const { searchPublicItems } = require('../services/mercadoLivreApiService.js');
+const {
+    getCatalogProduct,
+    searchCatalogProducts
+} = require('../services/mercadoLivreApiService.js');
 
 const DEFAULT_SEARCH_QUERIES = [
     'celular',
@@ -32,34 +35,50 @@ function calculateDiscount(price, originalPrice) {
     return `${Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF`;
 }
 
-function mapItemToOffer(item) {
+function mapProductToOffer(product) {
+    const winningItem = product.buy_box_winner;
+
     return {
-        id: item.id,
-        name: item.title,
+        id: winningItem.item_id,
+        name: product.name,
         store: 'Mercado Livre',
-        category: item.category_id,
-        price: formatPrice(item.price, item.currency_id),
-        oldPrice: formatPrice(item.original_price, item.currency_id),
-        discount: calculateDiscount(item.price, item.original_price),
-        image: item.secure_thumbnail || item.thumbnail,
-        productUrl: item.permalink,
+        category: winningItem.category_id || product.domain_id,
+        price: formatPrice(winningItem.price, winningItem.currency_id),
+        oldPrice: formatPrice(winningItem.original_price, winningItem.currency_id),
+        discount: calculateDiscount(winningItem.price, winningItem.original_price),
+        image: product.pictures?.[0]?.url,
+        productUrl: product.permalink,
         affiliateUrl: null,
-        available: item.available_quantity > 0
+        available: Number.isFinite(winningItem.available_quantity)
+            ? winningItem.available_quantity > 0
+            : true
     };
 }
 
 async function getOffers() {
-    const itemsByQuery = [];
+    const productsByQuery = [];
     for (const query of getSearchQueries()) {
-        itemsByQuery.push(await searchPublicItems(query, 5));
+        productsByQuery.push(await searchCatalogProducts(query, 3));
     }
-    const uniqueItems = new Map();
+    const productIds = new Set();
 
-    itemsByQuery.flat().forEach(item => {
-        if (item?.id && !uniqueItems.has(item.id)) uniqueItems.set(item.id, item);
+    productsByQuery.flat().forEach(product => {
+        if (product?.id) productIds.add(product.id);
     });
 
-    return [...uniqueItems.values()].map(mapItemToOffer);
+    const products = [];
+    for (const productId of productIds) {
+        const product = await getCatalogProduct(productId);
+        if (
+            product.status === 'active' &&
+            product.buy_box_winner?.item_id &&
+            Number.isFinite(product.buy_box_winner.price)
+        ) {
+            products.push(product);
+        }
+    }
+
+    return products.map(mapProductToOffer);
 }
 
 module.exports = {

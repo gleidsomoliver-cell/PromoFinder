@@ -18,7 +18,7 @@ async function getOffersWithFallback(primaryAdapters, fallbackAdapters) {
 
         console.warn('Fallback local de ofertas ativado.', {
             category: 'empty_response',
-            resource: '/sites/MLB/search',
+            resource: '/products/search',
             stage: 'offer_selection',
             status: 200
         });

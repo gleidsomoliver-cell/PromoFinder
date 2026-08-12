@@ -87,7 +87,10 @@ async function getValidToken(forceRefresh = false) {
 
 async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = true) {
     const tokenData = await getValidToken();
-    const resource = new URL(pathname, API_BASE_URL).pathname;
+    const resourcePath = new URL(pathname, API_BASE_URL).pathname;
+    const resource = /^\/products\/(?!search$)[^/]+$/.test(resourcePath)
+        ? '/products/{product_id}'
+        : resourcePath;
     let response;
 
     for (let attempt = 0; attempt <= MAX_RATE_LIMIT_RETRIES; attempt += 1) {
@@ -157,16 +160,18 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
     }
 }
 
-async function searchPublicItems(query, limit = 5) {
+async function searchCatalogProducts(query, limit = 3) {
     const searchParameters = new URLSearchParams({
+        site_id: 'MLB',
+        status: 'active',
         q: query,
         limit: String(limit)
     });
-    const search = await authenticatedFetch(`/sites/MLB/search?${searchParameters}`);
+    const search = await authenticatedFetch(`/products/search?${searchParameters}`);
 
     if (!Array.isArray(search.results)) {
         throw new MercadoLivreApiError('invalid_items_response', {
-            resource: '/sites/MLB/search',
+            resource: '/products/search',
             stage: 'response_validation',
             statusCode: 200
         });
@@ -175,7 +180,22 @@ async function searchPublicItems(query, limit = 5) {
     return search.results;
 }
 
+async function getCatalogProduct(productId) {
+    const product = await authenticatedFetch(`/products/${encodeURIComponent(productId)}`);
+
+    if (!product || product.id !== productId) {
+        throw new MercadoLivreApiError('invalid_product_response', {
+            resource: '/products/{product_id}',
+            stage: 'response_validation',
+            statusCode: 200
+        });
+    }
+
+    return product;
+}
+
 module.exports = {
+    getCatalogProduct,
     MercadoLivreApiError,
-    searchPublicItems
+    searchCatalogProducts
 };
