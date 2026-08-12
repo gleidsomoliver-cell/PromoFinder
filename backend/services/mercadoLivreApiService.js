@@ -8,6 +8,38 @@ const API_BASE_URL = 'https://api.mercadolibre.com';
 const EXPIRY_MARGIN_MS = 60_000;
 const MAX_RATE_LIMIT_RETRIES = 2;
 let refreshInProgress = null;
+let productShapeLogged = false;
+
+function describeValue(value) {
+    if (Array.isArray(value)) return { count: value.length, type: 'array' };
+    if (value === null) return { type: 'null' };
+    return { type: typeof value };
+}
+
+function logProductShape(product) {
+    if (productShapeLogged) return;
+
+    const propertyNames = Object.keys(product).sort();
+    const relationshipPropertyNames = propertyNames.filter(propertyName =>
+        /(item|seller|offer|listing|publication)/i.test(propertyName)
+    );
+    const propertyTypes = Object.fromEntries(
+        propertyNames.map(propertyName => [propertyName, describeValue(product[propertyName])])
+    );
+
+    console.info('Diagnóstico temporário seguro da resposta de produto do Mercado Livre.', {
+        hasBuyBoxWinner: Object.hasOwn(product, 'buy_box_winner'),
+        hasBuyBoxWinnerPriceRange: Object.hasOwn(product, 'buy_box_winner_price_range'),
+        hasPermalink: Object.hasOwn(product, 'permalink'),
+        hasPictures: Object.hasOwn(product, 'pictures'),
+        hasPriceRange: Object.hasOwn(product, 'price_range'),
+        propertyNames,
+        propertyTypes,
+        relationshipPropertyNames,
+        topLevelPropertyCount: propertyNames.length
+    });
+    productShapeLogged = true;
+}
 
 class MercadoLivreApiError extends Error {
     constructor(category, { resource = null, stage, statusCode = null } = {}) {
@@ -196,6 +228,7 @@ async function getCatalogProduct(productId) {
         });
     }
 
+    logProductShape(product);
     return product;
 }
 
