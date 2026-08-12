@@ -23,6 +23,10 @@ function wait(milliseconds) {
 }
 
 async function renewToken(tokenData) {
+    if (!tokenData.refreshToken) {
+        throw new MercadoLivreApiError('reauthorization_required');
+    }
+
     if (!refreshInProgress) {
         refreshInProgress = (async () => {
             const configuration = getOAuthConfiguration();
@@ -43,11 +47,14 @@ async function renewToken(tokenData) {
 
 async function getValidToken(forceRefresh = false) {
     const tokenData = await loadTokenData();
-    if (!tokenData?.accessToken || !tokenData?.refreshToken) {
+    if (!tokenData?.accessToken) {
         throw new MercadoLivreApiError('missing_token');
     }
 
     if (forceRefresh || !tokenData.expiresAt || Date.now() >= tokenData.expiresAt - EXPIRY_MARGIN_MS) {
+        if (!tokenData.refreshToken) {
+            throw new MercadoLivreApiError('reauthorization_required');
+        }
         return renewToken(tokenData);
     }
 
@@ -83,6 +90,9 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
     }
 
     if (response.status === 401 && allowTokenRefresh) {
+        if (!tokenData.refreshToken) {
+            throw new MercadoLivreApiError('reauthorization_required', 401);
+        }
         await getValidToken(true);
         return authenticatedFetch(pathname, options, false);
     }

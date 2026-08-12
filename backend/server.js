@@ -102,6 +102,11 @@ const server = http.createServer(async (request, response) => {
                 try {
                     const tokenData = await exchangeAuthorizationCode(authorizationCode, configuration);
                     await saveTokenData(tokenData);
+                    if (!tokenData.refreshToken) {
+                        console.warn(
+                            'Autorização do Mercado Livre recebida sem renovação automática; nova autorização será necessária após a expiração.'
+                        );
+                    }
                 } catch (error) {
                     if (error instanceof MercadoLivreAuthError) {
                         console.error(`Falha segura na autenticação do Mercado Livre: ${error.type}.`);

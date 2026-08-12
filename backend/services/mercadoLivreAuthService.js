@@ -84,19 +84,20 @@ async function requestToken(parameters) {
         throw new MercadoLivreAuthError('missing_access_token');
     }
 
-    if (typeof tokenData.refresh_token !== 'string' || !tokenData.refresh_token) {
-        throw new MercadoLivreAuthError('missing_refresh_token');
-    }
-
     if (!Number.isFinite(tokenData.expires_in) || tokenData.user_id === undefined) {
         throw new MercadoLivreAuthError('invalid_token_response');
     }
+
+    const refreshToken = typeof tokenData.refresh_token === 'string' && tokenData.refresh_token
+        ? tokenData.refresh_token
+        : null;
 
     return {
         accessToken: tokenData.access_token,
         expiresAt: Date.now() + (tokenData.expires_in * 1000),
         expiresIn: tokenData.expires_in,
-        refreshToken: tokenData.refresh_token,
+        refreshToken,
+        scope: typeof tokenData.scope === 'string' ? tokenData.scope : '',
         userId: tokenData.user_id
     };
 }
