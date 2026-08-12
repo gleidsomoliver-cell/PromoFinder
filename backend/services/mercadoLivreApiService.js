@@ -88,9 +88,14 @@ async function getValidToken(forceRefresh = false) {
 async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = true) {
     const tokenData = await getValidToken();
     const resourcePath = new URL(pathname, API_BASE_URL).pathname;
-    const resource = /^\/products\/(?!search$)[^/]+$/.test(resourcePath)
-        ? '/products/{product_id}'
-        : resourcePath;
+    let resource = resourcePath;
+    if (/^\/products\/[^/]+\/items$/.test(resourcePath)) {
+        resource = '/products/{product_id}/items';
+    } else if (/^\/products\/(?!search$)[^/]+$/.test(resourcePath)) {
+        resource = '/products/{product_id}';
+    } else if (/^\/items\/[^/]+$/.test(resourcePath)) {
+        resource = '/items/{item_id}';
+    }
     let response;
 
     for (let attempt = 0; attempt <= MAX_RATE_LIMIT_RETRIES; attempt += 1) {
@@ -194,8 +199,41 @@ async function getCatalogProduct(productId) {
     return product;
 }
 
+async function getCatalogProductItems(productId, limit = 3) {
+    const searchParameters = new URLSearchParams({ limit: String(limit) });
+    const items = await authenticatedFetch(
+        `/products/${encodeURIComponent(productId)}/items?${searchParameters}`
+    );
+
+    if (!Array.isArray(items.results)) {
+        throw new MercadoLivreApiError('invalid_product_items_response', {
+            resource: '/products/{product_id}/items',
+            stage: 'response_validation',
+            statusCode: 200
+        });
+    }
+
+    return items.results;
+}
+
+async function getItem(itemId) {
+    const item = await authenticatedFetch(`/items/${encodeURIComponent(itemId)}`);
+
+    if (!item || item.id !== itemId) {
+        throw new MercadoLivreApiError('invalid_item_response', {
+            resource: '/items/{item_id}',
+            stage: 'response_validation',
+            statusCode: 200
+        });
+    }
+
+    return item;
+}
+
 module.exports = {
     getCatalogProduct,
+    getCatalogProductItems,
+    getItem,
     MercadoLivreApiError,
     searchCatalogProducts
 };
