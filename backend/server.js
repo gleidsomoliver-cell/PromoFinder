@@ -1,5 +1,10 @@
 const http = require('node:http');
 const localOffersAdapter = require('./adapters/localOffersAdapter.js');
+const {
+    MercadoLivreAuthError,
+    exchangeAuthorizationCode,
+    getOAuthConfiguration
+} = require('./services/mercadoLivreAuthService.js');
 const { getOffers } = require('./services/offerService.js');
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
@@ -62,10 +67,37 @@ const server = http.createServer(async (request, response) => {
             }
 
             if (authorizationCode) {
+                const configuration = getOAuthConfiguration();
+
+                if (configuration.missingVariables.length > 0) {
+                    sendHtml(
+                        response,
+                        503,
+                        `A autorização não pôde ser concluída porque a configuração do servidor está incompleta: ${configuration.missingVariables.join(', ')}.`
+                    );
+                    return;
+                }
+
+                try {
+                    await exchangeAuthorizationCode(authorizationCode, configuration);
+                } catch (error) {
+                    if (error instanceof MercadoLivreAuthError) {
+                        console.error(`Falha segura na autenticação do Mercado Livre: ${error.type}.`);
+                        sendHtml(
+                            response,
+                            502,
+                            'Não foi possível concluir a autorização do Mercado Livre. Tente novamente.'
+                        );
+                        return;
+                    }
+
+                    throw error;
+                }
+
                 sendHtml(
                     response,
                     200,
-                    'Autorização do Mercado Livre recebida com sucesso. Você pode fechar esta janela.'
+                    'Autorização do Mercado Livre concluída com sucesso. Você pode fechar esta janela.'
                 );
                 return;
             }
