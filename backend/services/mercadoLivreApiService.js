@@ -10,11 +10,14 @@ const MAX_RATE_LIMIT_RETRIES = 2;
 let refreshInProgress = null;
 
 class MercadoLivreApiError extends Error {
-    constructor(type, statusCode) {
-        super(type);
+    constructor(category, { resource = null, stage, statusCode = null } = {}) {
+        super(category);
         this.name = 'MercadoLivreApiError';
+        this.category = category;
+        this.resource = resource;
+        this.stage = stage;
         this.statusCode = statusCode;
-        this.type = type;
+        this.type = category;
     }
 }
 
@@ -24,19 +27,32 @@ function wait(milliseconds) {
 
 async function renewToken(tokenData) {
     if (!tokenData.refreshToken) {
-        throw new MercadoLivreApiError('reauthorization_required');
+        throw new MercadoLivreApiError('reauthorization_required', { stage: 'token_refresh' });
     }
 
     if (!refreshInProgress) {
         refreshInProgress = (async () => {
             const configuration = getOAuthConfiguration();
             if (configuration.missingVariables.length > 0) {
-                throw new MercadoLivreApiError('missing_oauth_configuration');
+                throw new MercadoLivreApiError('missing_oauth_configuration', {
+                    stage: 'token_refresh'
+                });
             }
 
-            const renewedToken = await refreshAccessToken(tokenData.refreshToken, configuration);
-            await saveTokenData(renewedToken);
-            return renewedToken;
+            try {
+                const renewedToken = await refreshAccessToken(
+                    tokenData.refreshToken,
+                    configuration
+                );
+                await saveTokenData(renewedToken);
+                return renewedToken;
+            } catch (error) {
+                if (error instanceof MercadoLivreApiError) throw error;
+                throw new MercadoLivreApiError(error.type || 'token_refresh_error', {
+                    resource: '/oauth/token',
+                    stage: 'token_refresh'
+                });
+            }
         })().finally(() => {
             refreshInProgress = null;
         });
@@ -46,14 +62,22 @@ async function renewToken(tokenData) {
 }
 
 async function getValidToken(forceRefresh = false) {
-    const tokenData = await loadTokenData();
+    let tokenData;
+    try {
+        tokenData = await loadTokenData();
+    } catch {
+        throw new MercadoLivreApiError('token_store_error', { stage: 'token_load' });
+    }
+
     if (!tokenData?.accessToken) {
-        throw new MercadoLivreApiError('missing_token');
+        throw new MercadoLivreApiError('missing_token', { stage: 'token_load' });
     }
 
     if (forceRefresh || !tokenData.expiresAt || Date.now() >= tokenData.expiresAt - EXPIRY_MARGIN_MS) {
         if (!tokenData.refreshToken) {
-            throw new MercadoLivreApiError('reauthorization_required');
+            throw new MercadoLivreApiError('reauthorization_required', {
+                stage: 'token_validation'
+            });
         }
         return renewToken(tokenData);
     }
@@ -63,6 +87,7 @@ async function getValidToken(forceRefresh = false) {
 
 async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = true) {
     const tokenData = await getValidToken();
+    const resource = new URL(pathname, API_BASE_URL).pathname;
     let response;
 
     for (let attempt = 0; attempt <= MAX_RATE_LIMIT_RETRIES; attempt += 1) {
@@ -77,7 +102,10 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
                 signal: AbortSignal.timeout(10000)
             });
         } catch {
-            throw new MercadoLivreApiError('network_error');
+            throw new MercadoLivreApiError('network_error', {
+                resource,
+                stage: 'api_request'
+            });
         }
 
         if (response.status !== 429 || attempt === MAX_RATE_LIMIT_RETRIES) break;
@@ -91,19 +119,41 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
 
     if (response.status === 401 && allowTokenRefresh) {
         if (!tokenData.refreshToken) {
-            throw new MercadoLivreApiError('reauthorization_required', 401);
+            throw new MercadoLivreApiError('reauthorization_required', {
+                resource,
+                stage: 'api_authentication',
+                statusCode: 401
+            });
         }
         await getValidToken(true);
         return authenticatedFetch(pathname, options, false);
     }
 
-    if (response.status === 429) throw new MercadoLivreApiError('rate_limited', 429);
-    if (!response.ok) throw new MercadoLivreApiError('invalid_response', response.status);
+    if (response.status === 429) {
+        throw new MercadoLivreApiError('rate_limited', {
+            resource,
+            stage: 'api_request',
+            statusCode: 429
+        });
+    }
+    if (!response.ok) {
+        throw new MercadoLivreApiError('http_error', {
+            resource,
+            stage: response.status === 401 || response.status === 403
+                ? 'api_authentication'
+                : 'api_request',
+            statusCode: response.status
+        });
+    }
 
     try {
         return JSON.parse(await response.text());
     } catch {
-        throw new MercadoLivreApiError('invalid_json', response.status);
+        throw new MercadoLivreApiError('invalid_json', {
+            resource,
+            stage: 'response_parse',
+            statusCode: response.status
+        });
     }
 }
 
@@ -115,7 +165,11 @@ async function searchPublicItems(query, limit = 5) {
     const search = await authenticatedFetch(`/sites/MLB/search?${searchParameters}`);
 
     if (!Array.isArray(search.results)) {
-        throw new MercadoLivreApiError('invalid_items_response');
+        throw new MercadoLivreApiError('invalid_items_response', {
+            resource: '/sites/MLB/search',
+            stage: 'response_validation',
+            statusCode: 200
+        });
     }
 
     return search.results;

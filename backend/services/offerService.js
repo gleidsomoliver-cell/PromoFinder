@@ -15,8 +15,20 @@ async function getOffersWithFallback(primaryAdapters, fallbackAdapters) {
     try {
         const offers = await getOffers(primaryAdapters);
         if (offers.length > 0) return offers;
+
+        console.warn('Fallback local de ofertas ativado.', {
+            category: 'empty_response',
+            resource: '/sites/MLB/search',
+            stage: 'offer_selection',
+            status: 200
+        });
     } catch (error) {
-        console.error('Fonte externa de ofertas indisponível; usando fallback local.');
+        console.error('Fallback local de ofertas ativado.', {
+            category: error.category || 'unexpected_error',
+            resource: error.resource || null,
+            stage: error.stage || 'external_offer_source',
+            status: error.statusCode || null
+        });
     }
 
     return getOffers(fallbackAdapters);
