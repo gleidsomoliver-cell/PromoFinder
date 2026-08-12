@@ -6,8 +6,7 @@ const {
 const DEFAULT_SEARCH_QUERIES = [
     'celular',
     'notebook',
-    'smart tv',
-    'fone de ouvido'
+    'televisao'
 ];
 
 function getSearchQueries() {
@@ -61,22 +60,54 @@ async function getOffers() {
         productsByQuery.push(await searchCatalogProducts(query, 3));
     }
     const productIds = new Set();
+    const diagnostics = {
+        accepted: 0,
+        detailsFetched: 0,
+        discardedInactive: 0,
+        discardedMissingBuyBoxWinner: 0,
+        discardedMissingImage: 0,
+        discardedMissingPermalink: 0,
+        discardedMissingPrice: 0,
+        searchResults: productsByQuery.flat().length,
+        uniqueProducts: 0
+    };
 
     productsByQuery.flat().forEach(product => {
         if (product?.id) productIds.add(product.id);
     });
+    diagnostics.uniqueProducts = productIds.size;
 
     const products = [];
     for (const productId of productIds) {
         const product = await getCatalogProduct(productId);
-        if (
-            product.status === 'active' &&
-            product.buy_box_winner?.item_id &&
-            Number.isFinite(product.buy_box_winner.price)
-        ) {
-            products.push(product);
+        diagnostics.detailsFetched += 1;
+
+        if (product.status !== 'active') {
+            diagnostics.discardedInactive += 1;
+            continue;
         }
+        if (!product.buy_box_winner?.item_id) {
+            diagnostics.discardedMissingBuyBoxWinner += 1;
+            continue;
+        }
+        if (!Number.isFinite(product.buy_box_winner.price)) {
+            diagnostics.discardedMissingPrice += 1;
+            continue;
+        }
+        if (!product.pictures?.[0]?.url) {
+            diagnostics.discardedMissingImage += 1;
+            continue;
+        }
+        if (typeof product.permalink !== 'string' || !product.permalink) {
+            diagnostics.discardedMissingPermalink += 1;
+            continue;
+        }
+
+        products.push(product);
     }
+
+    diagnostics.accepted = products.length;
+    console.info('Diagnóstico seguro da seleção de ofertas do Mercado Livre.', diagnostics);
 
     return products.map(mapProductToOffer);
 }
