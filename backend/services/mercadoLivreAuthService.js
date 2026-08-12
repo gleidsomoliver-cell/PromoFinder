@@ -31,13 +31,26 @@ function getOAuthConfiguration() {
 }
 
 async function exchangeAuthorizationCode(code, configuration) {
-    const requestBody = new URLSearchParams({
+    return requestToken({
         grant_type: 'authorization_code',
         client_id: configuration.clientId,
         client_secret: configuration.clientSecret,
         code,
         redirect_uri: configuration.redirectUri
     });
+}
+
+async function refreshAccessToken(refreshToken, configuration) {
+    return requestToken({
+        grant_type: 'refresh_token',
+        client_id: configuration.clientId,
+        client_secret: configuration.clientSecret,
+        refresh_token: refreshToken
+    });
+}
+
+async function requestToken(parameters) {
+    const requestBody = new URLSearchParams(parameters);
 
     let tokenResponse;
 
@@ -70,10 +83,27 @@ async function exchangeAuthorizationCode(code, configuration) {
     if (!tokenData || typeof tokenData.access_token !== 'string' || !tokenData.access_token) {
         throw new MercadoLivreAuthError('missing_access_token');
     }
+
+    if (typeof tokenData.refresh_token !== 'string' || !tokenData.refresh_token) {
+        throw new MercadoLivreAuthError('missing_refresh_token');
+    }
+
+    if (!Number.isFinite(tokenData.expires_in) || tokenData.user_id === undefined) {
+        throw new MercadoLivreAuthError('invalid_token_response');
+    }
+
+    return {
+        accessToken: tokenData.access_token,
+        expiresAt: Date.now() + (tokenData.expires_in * 1000),
+        expiresIn: tokenData.expires_in,
+        refreshToken: tokenData.refresh_token,
+        userId: tokenData.user_id
+    };
 }
 
 module.exports = {
     MercadoLivreAuthError,
     exchangeAuthorizationCode,
-    getOAuthConfiguration
+    getOAuthConfiguration,
+    refreshAccessToken
 };

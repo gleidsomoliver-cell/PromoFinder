@@ -11,6 +11,18 @@ async function getOffers(adapters) {
         .filter(Boolean);
 }
 
+async function getOffersWithFallback(primaryAdapters, fallbackAdapters) {
+    try {
+        const offers = await getOffers(primaryAdapters);
+        if (offers.length > 0) return offers;
+    } catch (error) {
+        console.error('Fonte externa de ofertas indisponível; usando fallback local.');
+    }
+
+    return getOffers(fallbackAdapters);
+}
+
 module.exports = {
-    getOffers
+    getOffers,
+    getOffersWithFallback
 };

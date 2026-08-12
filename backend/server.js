@@ -1,11 +1,17 @@
 const http = require('node:http');
 const localOffersAdapter = require('./adapters/localOffersAdapter.js');
+const mercadoLivreOffersAdapter = require('./adapters/mercadoLivreOffersAdapter.js');
 const {
     MercadoLivreAuthError,
     exchangeAuthorizationCode,
     getOAuthConfiguration
 } = require('./services/mercadoLivreAuthService.js');
-const { getOffers } = require('./services/offerService.js');
+const { getOffersWithFallback } = require('./services/offerService.js');
+const {
+    getStoreConfiguration,
+    logMemoryStoreWarning,
+    saveTokenData
+} = require('./services/tokenStore.js');
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
 
@@ -68,30 +74,47 @@ const server = http.createServer(async (request, response) => {
 
             if (authorizationCode) {
                 const configuration = getOAuthConfiguration();
+                const storeConfiguration = getStoreConfiguration();
 
-                if (configuration.missingVariables.length > 0) {
+                const missingVariables = [
+                    ...configuration.missingVariables,
+                    ...storeConfiguration.missingVariables
+                ];
+
+                if (missingVariables.length > 0) {
                     sendHtml(
                         response,
                         503,
-                        `A autorização não pôde ser concluída porque a configuração do servidor está incompleta: ${configuration.missingVariables.join(', ')}.`
+                        `A autorização não pôde ser concluída porque a configuração do servidor está incompleta: ${missingVariables.join(', ')}.`
+                    );
+                    return;
+                }
+
+                if (storeConfiguration.invalidVariables) {
+                    sendHtml(
+                        response,
+                        503,
+                        `A autorização não pôde ser concluída porque a configuração do servidor é inválida: ${storeConfiguration.invalidVariables.join(', ')}.`
                     );
                     return;
                 }
 
                 try {
-                    await exchangeAuthorizationCode(authorizationCode, configuration);
+                    const tokenData = await exchangeAuthorizationCode(authorizationCode, configuration);
+                    await saveTokenData(tokenData);
                 } catch (error) {
                     if (error instanceof MercadoLivreAuthError) {
                         console.error(`Falha segura na autenticação do Mercado Livre: ${error.type}.`);
-                        sendHtml(
-                            response,
-                            502,
-                            'Não foi possível concluir a autorização do Mercado Livre. Tente novamente.'
-                        );
-                        return;
+                    } else {
+                        console.error('Falha segura ao armazenar a autorização do Mercado Livre.');
                     }
 
-                    throw error;
+                    sendHtml(
+                        response,
+                        502,
+                        'Não foi possível concluir a autorização do Mercado Livre. Tente novamente.'
+                    );
+                    return;
                 }
 
                 sendHtml(
@@ -111,7 +134,10 @@ const server = http.createServer(async (request, response) => {
         }
 
         if (request.method === 'GET' && requestUrl.pathname === '/api/offers') {
-            const offers = await getOffers([localOffersAdapter]);
+            const offers = await getOffersWithFallback(
+                [mercadoLivreOffersAdapter],
+                [localOffersAdapter]
+            );
 
             sendJson(response, 200, offers);
             return;
@@ -130,5 +156,6 @@ server.on('error', error => {
 });
 
 server.listen(port, () => {
+    if (getStoreConfiguration().mode === 'memory') logMemoryStoreWarning();
     console.log(`PromoFinder API disponível em http://localhost:${port}/api/offers`);
 });
