@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "diagnose:highlights": "node diagnostics/mercadoLivreHighlightsDiagnostic.js",
     "start": "node server.js"
   }
 }

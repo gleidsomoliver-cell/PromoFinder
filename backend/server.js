@@ -1,6 +1,10 @@
 const http = require('node:http');
+const crypto = require('node:crypto');
 const localOffersAdapter = require('./adapters/localOffersAdapter.js');
 const mercadoLivreOffersAdapter = require('./adapters/mercadoLivreOffersAdapter.js');
+const {
+    diagnoseCategoryHighlights
+} = require('./diagnostics/mercadoLivreHighlightsDiagnostic.js');
 const {
     MercadoLivreAuthError,
     exchangeAuthorizationCode,
@@ -14,6 +18,20 @@ const {
 } = require('./services/tokenStore.js');
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
+const HIGHLIGHTS_DIAGNOSTIC_CATEGORY_ID = 'MLB432825';
+const HIGHLIGHTS_DIAGNOSTIC_HEADER = 'x-highlights-diagnostic-key';
+
+function hasValidDiagnosticKey(request) {
+    const configuredKey = process.env.HIGHLIGHTS_DIAGNOSTIC_KEY;
+    const providedKey = request.headers[HIGHLIGHTS_DIAGNOSTIC_HEADER];
+
+    if (!configuredKey || typeof providedKey !== 'string') return false;
+
+    const configuredBuffer = Buffer.from(configuredKey, 'utf8');
+    const providedBuffer = Buffer.from(providedKey, 'utf8');
+    return configuredBuffer.length === providedBuffer.length
+        && crypto.timingSafeEqual(configuredBuffer, providedBuffer);
+}
 
 function sendJson(response, statusCode, data) {
     response.writeHead(statusCode, {
@@ -145,6 +163,38 @@ const server = http.createServer(async (request, response) => {
             );
 
             sendJson(response, 200, offers);
+            return;
+        }
+
+        if (
+            request.method === 'GET'
+            && requestUrl.pathname === '/api/diagnostics/mercadolivre/highlights'
+        ) {
+            if (!process.env.HIGHLIGHTS_DIAGNOSTIC_KEY) {
+                response.writeHead(404, { 'Access-Control-Allow-Origin': '*' });
+                response.end();
+                return;
+            }
+
+            if (!hasValidDiagnosticKey(request)) {
+                response.writeHead(401, { 'Access-Control-Allow-Origin': '*' });
+                response.end();
+                return;
+            }
+
+            try {
+                const { diagnostics } = await diagnoseCategoryHighlights(
+                    HIGHLIGHTS_DIAGNOSTIC_CATEGORY_ID
+                );
+                sendJson(response, 200, diagnostics);
+            } catch (error) {
+                console.error('Falha segura na rota de diagnóstico de highlights.', {
+                    category: error.category || error.name,
+                    stage: error.stage || 'diagnostic'
+                });
+                response.writeHead(502, { 'Access-Control-Allow-Origin': '*' });
+                response.end();
+            }
             return;
         }
 

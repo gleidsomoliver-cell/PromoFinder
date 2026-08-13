@@ -91,6 +91,10 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
     let resource = resourcePath;
     if (/^\/products\/(?!search$)[^/]+$/.test(resourcePath)) {
         resource = '/products/{product_id}';
+    } else if (/^\/items\/[^/]+$/.test(resourcePath)) {
+        resource = '/items/{item_id}';
+    } else if (/^\/highlights\/[^/]+\/category\/[^/]+$/.test(resourcePath)) {
+        resource = '/highlights/{site_id}/category/{category_id}';
     }
     let response;
 
@@ -195,8 +199,40 @@ async function getCatalogProduct(productId) {
     return product;
 }
 
+async function getCategoryHighlights(categoryId) {
+    const highlights = await authenticatedFetch(
+        `/highlights/MLB/category/${encodeURIComponent(categoryId)}`
+    );
+
+    if (!Array.isArray(highlights?.content)) {
+        throw new MercadoLivreApiError('invalid_highlights_response', {
+            resource: '/highlights/{site_id}/category/{category_id}',
+            stage: 'response_validation',
+            statusCode: 200
+        });
+    }
+
+    return highlights.content;
+}
+
+async function getItem(itemId) {
+    const item = await authenticatedFetch(`/items/${encodeURIComponent(itemId)}`);
+
+    if (!item || item.id !== itemId) {
+        throw new MercadoLivreApiError('invalid_item_response', {
+            resource: '/items/{item_id}',
+            stage: 'response_validation',
+            statusCode: 200
+        });
+    }
+
+    return item;
+}
+
 module.exports = {
+    getCategoryHighlights,
     getCatalogProduct,
+    getItem,
     MercadoLivreApiError,
     searchCatalogProducts
 };
