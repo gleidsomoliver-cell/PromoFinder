@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderOffers(offersToRender) {
         if (!offersGrid) return;
 
+        if (offersToRender.length === 0) {
+            offersGrid.innerHTML = `
+                <p class="no-results empty-offers" role="status">
+                    Nenhuma oferta disponível no momento. Estamos atualizando as melhores promoções.
+                </p>
+            `;
+            return;
+        }
+
         offersGrid.innerHTML = offersToRender.map(offer => {
             const stores = Array.isArray(offer.store) ? offer.store : [offer.store].filter(Boolean);
             const storeNames = stores.join(' ');
@@ -90,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const offers = await response.json();
 
-            if (!Array.isArray(offers) || offers.length === 0 || offers.some(offer => !offer || typeof offer !== 'object')) {
+            if (!Array.isArray(offers) || offers.some(offer => !offer || typeof offer !== 'object')) {
                 throw new Error('Formato de ofertas inesperado');
             }
 

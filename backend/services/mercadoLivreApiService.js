@@ -8,38 +8,6 @@ const API_BASE_URL = 'https://api.mercadolibre.com';
 const EXPIRY_MARGIN_MS = 60_000;
 const MAX_RATE_LIMIT_RETRIES = 2;
 let refreshInProgress = null;
-let productShapeLogged = false;
-
-function describeValue(value) {
-    if (Array.isArray(value)) return { count: value.length, type: 'array' };
-    if (value === null) return { type: 'null' };
-    return { type: typeof value };
-}
-
-function logProductShape(product) {
-    if (productShapeLogged) return;
-
-    const propertyNames = Object.keys(product).sort();
-    const relationshipPropertyNames = propertyNames.filter(propertyName =>
-        /(item|seller|offer|listing|publication)/i.test(propertyName)
-    );
-    const propertyTypes = Object.fromEntries(
-        propertyNames.map(propertyName => [propertyName, describeValue(product[propertyName])])
-    );
-
-    console.info('Diagnóstico temporário seguro da resposta de produto do Mercado Livre.', {
-        hasBuyBoxWinner: Object.hasOwn(product, 'buy_box_winner'),
-        hasBuyBoxWinnerPriceRange: Object.hasOwn(product, 'buy_box_winner_price_range'),
-        hasPermalink: Object.hasOwn(product, 'permalink'),
-        hasPictures: Object.hasOwn(product, 'pictures'),
-        hasPriceRange: Object.hasOwn(product, 'price_range'),
-        propertyNames,
-        propertyTypes,
-        relationshipPropertyNames,
-        topLevelPropertyCount: propertyNames.length
-    });
-    productShapeLogged = true;
-}
 
 class MercadoLivreApiError extends Error {
     constructor(category, { resource = null, stage, statusCode = null } = {}) {
@@ -121,12 +89,8 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
     const tokenData = await getValidToken();
     const resourcePath = new URL(pathname, API_BASE_URL).pathname;
     let resource = resourcePath;
-    if (/^\/products\/[^/]+\/items$/.test(resourcePath)) {
-        resource = '/products/{product_id}/items';
-    } else if (/^\/products\/(?!search$)[^/]+$/.test(resourcePath)) {
+    if (/^\/products\/(?!search$)[^/]+$/.test(resourcePath)) {
         resource = '/products/{product_id}';
-    } else if (/^\/items\/[^/]+$/.test(resourcePath)) {
-        resource = '/items/{item_id}';
     }
     let response;
 
@@ -228,45 +192,11 @@ async function getCatalogProduct(productId) {
         });
     }
 
-    logProductShape(product);
     return product;
-}
-
-async function getCatalogProductItems(productId, limit = 3) {
-    const searchParameters = new URLSearchParams({ limit: String(limit) });
-    const items = await authenticatedFetch(
-        `/products/${encodeURIComponent(productId)}/items?${searchParameters}`
-    );
-
-    if (!Array.isArray(items.results)) {
-        throw new MercadoLivreApiError('invalid_product_items_response', {
-            resource: '/products/{product_id}/items',
-            stage: 'response_validation',
-            statusCode: 200
-        });
-    }
-
-    return items.results;
-}
-
-async function getItem(itemId) {
-    const item = await authenticatedFetch(`/items/${encodeURIComponent(itemId)}`);
-
-    if (!item || item.id !== itemId) {
-        throw new MercadoLivreApiError('invalid_item_response', {
-            resource: '/items/{item_id}',
-            stage: 'response_validation',
-            statusCode: 200
-        });
-    }
-
-    return item;
 }
 
 module.exports = {
     getCatalogProduct,
-    getCatalogProductItems,
-    getItem,
     MercadoLivreApiError,
     searchCatalogProducts
 };
