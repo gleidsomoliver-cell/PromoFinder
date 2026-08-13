@@ -33,6 +33,17 @@ function isValidOffer(offer) {
     );
 }
 
+function getDiscardReasons(offer) {
+    return {
+        inactive: offer.status !== 'active',
+        missingPrice: !Number.isFinite(offer.price) || offer.price <= 0,
+        missingImage: !offer.image,
+        unavailable: !Number.isFinite(offer.availableQuantity)
+            || offer.availableQuantity <= 0,
+        missingPermalink: !offer.permalink
+    };
+}
+
 async function diagnoseCategoryHighlights(categoryId) {
     if (!/^MLB\d+$/.test(categoryId)) {
         throw new TypeError('categoryId deve ter o formato MLB seguido de números.');
@@ -46,18 +57,53 @@ async function diagnoseCategoryHighlights(categoryId) {
     }
 
     const itemOffers = [];
-    let itemDetailsFetched = 0;
-    let invalidItems = 0;
+    const itemDiagnostics = {
+        itemLookupAttempts: 0,
+        itemLookupSuccess: 0,
+        itemLookupHttp400: 0,
+        itemLookupHttp401: 0,
+        itemLookupHttp403: 0,
+        itemLookupHttp404: 0,
+        itemLookupOtherError: 0,
+        discardedInactive: 0,
+        discardedMissingPrice: 0,
+        discardedMissingImage: 0,
+        discardedUnavailable: 0,
+        discardedMissingPermalink: 0,
+        invalidItems: 0
+    };
 
     for (const entry of grouped.ITEM) {
+        itemDiagnostics.itemLookupAttempts += 1;
         try {
             const item = await getItem(entry.id);
-            itemDetailsFetched += 1;
+            itemDiagnostics.itemLookupSuccess += 1;
             const offer = toItemOffer(item);
-            if (isValidOffer(offer)) itemOffers.push(offer);
-            else invalidItems += 1;
-        } catch {
-            invalidItems += 1;
+            const discardReasons = getDiscardReasons(offer);
+
+            if (discardReasons.inactive) itemDiagnostics.discardedInactive += 1;
+            if (discardReasons.missingPrice) itemDiagnostics.discardedMissingPrice += 1;
+            if (discardReasons.missingImage) itemDiagnostics.discardedMissingImage += 1;
+            if (discardReasons.unavailable) itemDiagnostics.discardedUnavailable += 1;
+            if (discardReasons.missingPermalink) {
+                itemDiagnostics.discardedMissingPermalink += 1;
+            }
+
+            if (isValidOffer(offer)) {
+                itemOffers.push(offer);
+            } else {
+                itemDiagnostics.invalidItems += 1;
+            }
+        } catch (error) {
+            const statusCounter = {
+                400: 'itemLookupHttp400',
+                401: 'itemLookupHttp401',
+                403: 'itemLookupHttp403',
+                404: 'itemLookupHttp404'
+            }[error?.statusCode];
+
+            if (statusCounter) itemDiagnostics[statusCounter] += 1;
+            else itemDiagnostics.itemLookupOtherError += 1;
         }
     }
 
@@ -67,9 +113,21 @@ async function diagnoseCategoryHighlights(categoryId) {
         itemCount: grouped.ITEM.length,
         productCount: grouped.PRODUCT.length,
         userProductCount: grouped.USER_PRODUCT.length,
-        itemDetailsFetched,
+        itemDetailsFetched: itemDiagnostics.itemLookupSuccess,
+        itemLookupAttempts: itemDiagnostics.itemLookupAttempts,
+        itemLookupSuccess: itemDiagnostics.itemLookupSuccess,
+        itemLookupHttp400: itemDiagnostics.itemLookupHttp400,
+        itemLookupHttp401: itemDiagnostics.itemLookupHttp401,
+        itemLookupHttp403: itemDiagnostics.itemLookupHttp403,
+        itemLookupHttp404: itemDiagnostics.itemLookupHttp404,
+        itemLookupOtherError: itemDiagnostics.itemLookupOtherError,
+        discardedInactive: itemDiagnostics.discardedInactive,
+        discardedMissingPrice: itemDiagnostics.discardedMissingPrice,
+        discardedMissingImage: itemDiagnostics.discardedMissingImage,
+        discardedUnavailable: itemDiagnostics.discardedUnavailable,
+        discardedMissingPermalink: itemDiagnostics.discardedMissingPermalink,
         validItems: itemOffers.length,
-        invalidItems
+        invalidItems: itemDiagnostics.invalidItems
     };
 
     console.info('Diagnóstico seguro de highlights do Mercado Livre.', diagnostics);
@@ -106,6 +164,7 @@ if (require.main === module) {
 module.exports = {
     diagnoseCategoriesHighlights,
     diagnoseCategoryHighlights,
+    getDiscardReasons,
     isValidOffer,
     toItemOffer
 };
