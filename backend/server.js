@@ -3,7 +3,7 @@ const crypto = require('node:crypto');
 const localOffersAdapter = require('./adapters/localOffersAdapter.js');
 const mercadoLivreOffersAdapter = require('./adapters/mercadoLivreOffersAdapter.js');
 const {
-    diagnoseCategoryHighlights
+    diagnoseCategoriesHighlights
 } = require('./diagnostics/mercadoLivreHighlightsDiagnostic.js');
 const {
     MercadoLivreAuthError,
@@ -18,7 +18,13 @@ const {
 } = require('./services/tokenStore.js');
 
 const port = Number.parseInt(process.env.PORT, 10) || 3000;
-const HIGHLIGHTS_DIAGNOSTIC_CATEGORY_ID = 'MLB432825';
+const HIGHLIGHTS_DIAGNOSTIC_CATEGORY_IDS = Object.freeze([
+    'MLB437616', // Livros Físicos
+    'MLB5095', // Capas para Celulares
+    'MLB1166', // Pelúcias
+    'MLB9163', // Tapetes
+    'MLB23332' // Tênis
+]);
 const HIGHLIGHTS_DIAGNOSTIC_HEADER = 'x-highlights-diagnostic-key';
 
 function hasValidDiagnosticKey(request) {
@@ -183,8 +189,8 @@ const server = http.createServer(async (request, response) => {
             }
 
             try {
-                const { diagnostics } = await diagnoseCategoryHighlights(
-                    HIGHLIGHTS_DIAGNOSTIC_CATEGORY_ID
+                const diagnostics = await diagnoseCategoriesHighlights(
+                    HIGHLIGHTS_DIAGNOSTIC_CATEGORY_IDS
                 );
                 sendJson(response, 200, diagnostics);
             } catch (error) {

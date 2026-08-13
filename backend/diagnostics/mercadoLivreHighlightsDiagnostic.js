@@ -23,9 +23,8 @@ function toItemOffer(item) {
 
 function isValidOffer(offer) {
     return Boolean(
-        offer.title
-        && Number.isFinite(offer.price)
-        && offer.price >= 0
+        Number.isFinite(offer.price)
+        && offer.price > 0
         && offer.image
         && offer.status === 'active'
         && Number.isFinite(offer.availableQuantity)
@@ -63,6 +62,7 @@ async function diagnoseCategoryHighlights(categoryId) {
     }
 
     const diagnostics = {
+        categoryId,
         highlightsTotal: content.length,
         itemCount: grouped.ITEM.length,
         productCount: grouped.PRODUCT.length,
@@ -75,6 +75,20 @@ async function diagnoseCategoryHighlights(categoryId) {
     console.info('Diagnóstico seguro de highlights do Mercado Livre.', diagnostics);
 
     return { diagnostics, itemOffers };
+}
+
+async function diagnoseCategoriesHighlights(categoryIds) {
+    if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
+        throw new TypeError('categoryIds deve ser uma lista não vazia.');
+    }
+
+    const results = [];
+    for (const categoryId of categoryIds) {
+        const { diagnostics } = await diagnoseCategoryHighlights(categoryId);
+        results.push(diagnostics);
+    }
+
+    return results;
 }
 
 if (require.main === module) {
@@ -90,6 +104,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+    diagnoseCategoriesHighlights,
     diagnoseCategoryHighlights,
     isValidOffer,
     toItemOffer
