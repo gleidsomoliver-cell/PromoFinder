@@ -10,15 +10,53 @@ const MAX_RATE_LIMIT_RETRIES = 2;
 let refreshInProgress = null;
 
 class MercadoLivreApiError extends Error {
-    constructor(category, { resource = null, stage, statusCode = null } = {}) {
+    constructor(category, {
+        resource = null,
+        stage,
+        statusCode = null,
+        safeResponse = null
+    } = {}) {
         super(category);
         this.name = 'MercadoLivreApiError';
         this.category = category;
         this.resource = resource;
         this.stage = stage;
         this.statusCode = statusCode;
+        this.safeResponse = safeResponse;
         this.type = category;
     }
+}
+
+function sanitizeErrorCause(cause) {
+    const safeValue = value => (
+        typeof value === 'string'
+        || typeof value === 'number'
+        || typeof value === 'boolean'
+    ) ? value : null;
+    const sanitizeEntry = entry => ({
+        code: entry && Object.hasOwn(entry, 'code') ? safeValue(entry.code) : null,
+        type: entry && Object.hasOwn(entry, 'type') ? safeValue(entry.type) : null,
+        message: entry && Object.hasOwn(entry, 'message') ? safeValue(entry.message) : null
+    });
+
+    if (Array.isArray(cause)) return cause.map(sanitizeEntry);
+    if (cause && typeof cause === 'object') return sanitizeEntry(cause);
+    return null;
+}
+
+function sanitizeForbiddenResponse(payload) {
+    const safeValue = value => (
+        typeof value === 'string'
+        || typeof value === 'number'
+        || typeof value === 'boolean'
+    ) ? value : null;
+    return {
+        status: payload && Object.hasOwn(payload, 'status') ? safeValue(payload.status) : null,
+        error: payload && Object.hasOwn(payload, 'error') ? safeValue(payload.error) : null,
+        message: payload && Object.hasOwn(payload, 'message') ? safeValue(payload.message) : null,
+        code: payload && Object.hasOwn(payload, 'code') ? safeValue(payload.code) : null,
+        cause: sanitizeErrorCause(payload?.cause)
+    };
 }
 
 function wait(milliseconds) {
@@ -145,12 +183,21 @@ async function authenticatedFetch(pathname, options = {}, allowTokenRefresh = tr
         });
     }
     if (!response.ok) {
+        let safeResponse = null;
+        if (response.status === 403) {
+            try {
+                safeResponse = sanitizeForbiddenResponse(JSON.parse(await response.text()));
+            } catch {
+                safeResponse = sanitizeForbiddenResponse(null);
+            }
+        }
         throw new MercadoLivreApiError('http_error', {
             resource,
             stage: response.status === 401 || response.status === 403
                 ? 'api_authentication'
                 : 'api_request',
-            statusCode: response.status
+            statusCode: response.status,
+            safeResponse
         });
     }
 
@@ -234,5 +281,6 @@ module.exports = {
     getCatalogProduct,
     getItem,
     MercadoLivreApiError,
+    sanitizeForbiddenResponse,
     searchCatalogProducts
 };

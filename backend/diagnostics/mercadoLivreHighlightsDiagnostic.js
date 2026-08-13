@@ -44,7 +44,20 @@ function getDiscardReasons(offer) {
     };
 }
 
-async function diagnoseCategoryHighlights(categoryId) {
+function captureFirstForbidden(itemDiagnostics, sharedState, error) {
+    if (error?.statusCode !== 403 || sharedState.firstForbiddenCaptured) return;
+
+    sharedState.firstForbiddenCaptured = true;
+    itemDiagnostics.firstItemLookupHttp403 = error.safeResponse || {
+        status: null,
+        error: null,
+        message: null,
+        code: null,
+        cause: null
+    };
+}
+
+async function diagnoseCategoryHighlights(categoryId, sharedState = { firstForbiddenCaptured: false }) {
     if (!/^MLB\d+$/.test(categoryId)) {
         throw new TypeError('categoryId deve ter o formato MLB seguido de números.');
     }
@@ -65,6 +78,7 @@ async function diagnoseCategoryHighlights(categoryId) {
         itemLookupHttp403: 0,
         itemLookupHttp404: 0,
         itemLookupOtherError: 0,
+        firstItemLookupHttp403: null,
         discardedInactive: 0,
         discardedMissingPrice: 0,
         discardedMissingImage: 0,
@@ -104,6 +118,8 @@ async function diagnoseCategoryHighlights(categoryId) {
 
             if (statusCounter) itemDiagnostics[statusCounter] += 1;
             else itemDiagnostics.itemLookupOtherError += 1;
+
+            captureFirstForbidden(itemDiagnostics, sharedState, error);
         }
     }
 
@@ -121,6 +137,7 @@ async function diagnoseCategoryHighlights(categoryId) {
         itemLookupHttp403: itemDiagnostics.itemLookupHttp403,
         itemLookupHttp404: itemDiagnostics.itemLookupHttp404,
         itemLookupOtherError: itemDiagnostics.itemLookupOtherError,
+        firstItemLookupHttp403: itemDiagnostics.firstItemLookupHttp403,
         discardedInactive: itemDiagnostics.discardedInactive,
         discardedMissingPrice: itemDiagnostics.discardedMissingPrice,
         discardedMissingImage: itemDiagnostics.discardedMissingImage,
@@ -141,8 +158,9 @@ async function diagnoseCategoriesHighlights(categoryIds) {
     }
 
     const results = [];
+    const sharedState = { firstForbiddenCaptured: false };
     for (const categoryId of categoryIds) {
-        const { diagnostics } = await diagnoseCategoryHighlights(categoryId);
+        const { diagnostics } = await diagnoseCategoryHighlights(categoryId, sharedState);
         results.push(diagnostics);
     }
 
@@ -162,6 +180,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+    captureFirstForbidden,
     diagnoseCategoriesHighlights,
     diagnoseCategoryHighlights,
     getDiscardReasons,
