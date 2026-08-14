@@ -1,46 +1,42 @@
 const {
     getCategoryHighlights,
-    getCatalogProduct
+    getUserProduct
 } = require('../services/mercadoLivreApiService.js');
 
 const SUPPORTED_TYPES = new Set(['ITEM', 'PRODUCT', 'USER_PRODUCT']);
-const MAX_PRODUCTS_PER_CATEGORY = 3;
-const MAX_VALID_PRODUCT_SAMPLES = 5;
+const MAX_USER_PRODUCTS_PER_CATEGORY = 3;
 
-function isValidMercadoLivrePermalink(permalink) {
-    if (typeof permalink !== 'string') return false;
-
-    try {
-        const url = new URL(permalink);
-        return url.protocol === 'https:'
-            && (
-                url.hostname === 'mercadolivre.com.br'
-                || url.hostname.endsWith('.mercadolivre.com.br')
-            );
-    } catch {
-        return false;
-    }
-}
-
-function createProductDiagnostics() {
+function createUserProductDiagnostics() {
     return {
-        productLookupAttempts: 0,
-        productLookupSuccess: 0,
-        productLookupHttp400: 0,
-        productLookupHttp401: 0,
-        productLookupHttp403: 0,
-        productLookupHttp404: 0,
-        productLookupOtherError: 0,
-        productsActive: 0,
-        productsWithName: 0,
-        productsWithPictures: 0,
-        productsWithPermalink: 0,
-        productsWithValidMercadoLivrePermalink: 0,
-        validProductSamples: []
+        userProductLookupAttempts: 0,
+        userProductLookupSuccess: 0,
+        userProductLookupHttp400: 0,
+        userProductLookupHttp401: 0,
+        userProductLookupHttp403: 0,
+        userProductLookupHttp404: 0,
+        userProductLookupOtherError: 0,
+        userProductsActive: 0,
+        userProductsWithUserId: 0,
+        userProductsWithName: 0,
+        userProductsWithPictures: 0,
+        firstUserProductLookupHttp403: null
     };
 }
 
-async function diagnoseCategoryHighlights(categoryId, sharedState = { validProductSamples: 0 }) {
+function captureFirstForbidden(userProductDiagnostics, sharedState, error) {
+    if (error?.statusCode !== 403 || sharedState.firstForbiddenCaptured) return;
+
+    sharedState.firstForbiddenCaptured = true;
+    userProductDiagnostics.firstUserProductLookupHttp403 = error.safeResponse || {
+        status: null,
+        error: null,
+        message: null,
+        code: null,
+        cause: null
+    };
+}
+
+async function diagnoseCategoryHighlights(categoryId, sharedState = { firstForbiddenCaptured: false }) {
     if (!/^MLB\d+$/.test(categoryId)) {
         throw new TypeError('categoryId deve ter o formato MLB seguido de números.');
     }
@@ -52,51 +48,34 @@ async function diagnoseCategoryHighlights(categoryId, sharedState = { validProdu
         if (entry && SUPPORTED_TYPES.has(entry.type)) grouped[entry.type].push(entry);
     }
 
-    const productDiagnostics = createProductDiagnostics();
-    for (const entry of grouped.PRODUCT.slice(0, MAX_PRODUCTS_PER_CATEGORY)) {
-        productDiagnostics.productLookupAttempts += 1;
+    const userProductDiagnostics = createUserProductDiagnostics();
+    for (const entry of grouped.USER_PRODUCT.slice(0, MAX_USER_PRODUCTS_PER_CATEGORY)) {
+        userProductDiagnostics.userProductLookupAttempts += 1;
         try {
-            const product = await getCatalogProduct(entry.id);
-            productDiagnostics.productLookupSuccess += 1;
+            const userProduct = await getUserProduct(entry.id);
+            userProductDiagnostics.userProductLookupSuccess += 1;
 
-            const hasName = typeof product.name === 'string' && product.name.trim().length > 0;
-            const hasPictures = Array.isArray(product.pictures) && product.pictures.length > 0;
-            const hasPermalink = typeof product.permalink === 'string'
-                && product.permalink.trim().length > 0;
-            const hasValidPermalink = isValidMercadoLivrePermalink(product.permalink);
-            const isActive = product.status === 'active';
-
-            if (isActive) productDiagnostics.productsActive += 1;
-            if (hasName) productDiagnostics.productsWithName += 1;
-            if (hasPictures) productDiagnostics.productsWithPictures += 1;
-            if (hasPermalink) productDiagnostics.productsWithPermalink += 1;
-            if (hasValidPermalink) {
-                productDiagnostics.productsWithValidMercadoLivrePermalink += 1;
+            if (userProduct.status === 'active') userProductDiagnostics.userProductsActive += 1;
+            if (userProduct.user_id !== null && userProduct.user_id !== undefined) {
+                userProductDiagnostics.userProductsWithUserId += 1;
             }
-
-            if (
-                isActive
-                && hasName
-                && hasPictures
-                && hasValidPermalink
-                && sharedState.validProductSamples < MAX_VALID_PRODUCT_SAMPLES
-            ) {
-                productDiagnostics.validProductSamples.push({
-                    name: product.name,
-                    permalink: product.permalink
-                });
-                sharedState.validProductSamples += 1;
+            if (typeof userProduct.name === 'string' && userProduct.name.trim().length > 0) {
+                userProductDiagnostics.userProductsWithName += 1;
+            }
+            if (Array.isArray(userProduct.pictures) && userProduct.pictures.length > 0) {
+                userProductDiagnostics.userProductsWithPictures += 1;
             }
         } catch (error) {
             const statusCounter = {
-                400: 'productLookupHttp400',
-                401: 'productLookupHttp401',
-                403: 'productLookupHttp403',
-                404: 'productLookupHttp404'
+                400: 'userProductLookupHttp400',
+                401: 'userProductLookupHttp401',
+                403: 'userProductLookupHttp403',
+                404: 'userProductLookupHttp404'
             }[error?.statusCode];
 
-            if (statusCounter) productDiagnostics[statusCounter] += 1;
-            else productDiagnostics.productLookupOtherError += 1;
+            if (statusCounter) userProductDiagnostics[statusCounter] += 1;
+            else userProductDiagnostics.userProductLookupOtherError += 1;
+            captureFirstForbidden(userProductDiagnostics, sharedState, error);
         }
     }
 
@@ -106,7 +85,7 @@ async function diagnoseCategoryHighlights(categoryId, sharedState = { validProdu
         itemCount: grouped.ITEM.length,
         productCount: grouped.PRODUCT.length,
         userProductCount: grouped.USER_PRODUCT.length,
-        productDiagnostics
+        userProductDiagnostics
     };
 
     console.info('Diagnóstico seguro de highlights do Mercado Livre.', diagnostics);
@@ -120,7 +99,7 @@ async function diagnoseCategoriesHighlights(categoryIds) {
     }
 
     const results = [];
-    const sharedState = { validProductSamples: 0 };
+    const sharedState = { firstForbiddenCaptured: false };
     for (const categoryId of categoryIds) {
         const { diagnostics } = await diagnoseCategoryHighlights(categoryId, sharedState);
         results.push(diagnostics);
@@ -142,8 +121,8 @@ if (require.main === module) {
 }
 
 module.exports = {
-    createProductDiagnostics,
+    captureFirstForbidden,
+    createUserProductDiagnostics,
     diagnoseCategoriesHighlights,
-    diagnoseCategoryHighlights,
-    isValidMercadoLivrePermalink
+    diagnoseCategoryHighlights
 };
