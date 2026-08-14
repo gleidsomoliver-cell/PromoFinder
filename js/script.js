@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const offersGrid = document.getElementById('offers-grid');
 
     function escapeHtml(value) {
+        if (value === null || value === undefined) return '';
+
         return String(value).replace(/[&<>'"]/g, character => ({
             '&': '&amp;',
             '<': '&lt;',
@@ -71,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                             <span class="price-label">Menor preço encontrado</span>
                         </div>
-                        <a href="${escapeHtml(offerUrl)}" class="btn-offer">
+                        <a href="${escapeHtml(offerUrl)}" class="btn-offer" target="_blank" rel="noopener noreferrer">
                             Ver oferta <i data-lucide="external-link"></i>
                         </a>
                     </div>

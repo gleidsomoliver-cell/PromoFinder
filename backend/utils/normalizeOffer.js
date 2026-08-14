@@ -3,6 +3,8 @@ const OPTIONAL_FIELDS = [
     'discount',
     'productUrl',
     'affiliateUrl',
+    'source',
+    'lastVerifiedAt',
     'couponCode',
     'couponExpiry'
 ];
@@ -37,7 +39,6 @@ function normalizeOffer(offer) {
         isNonEmptyString(offer.id) &&
         isNonEmptyString(offer.name) &&
         store !== null &&
-        isNonEmptyString(offer.category) &&
         isNonEmptyString(offer.price) &&
         isNonEmptyString(offer.image) &&
         typeof offer.available === 'boolean';
@@ -50,7 +51,7 @@ function normalizeOffer(offer) {
         id: offer.id.trim(),
         name: offer.name.trim(),
         store,
-        category: offer.category.trim(),
+        category: isNonEmptyString(offer.category) ? offer.category.trim() : null,
         price: offer.price.trim(),
         oldPrice: null,
         discount: null,
