@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favoritos | PromoFinder</title>
+    <meta name="description" content="Consulte as ofertas salvas nos seus favoritos do PromoFinder." />
+    <link rel="canonical" href="https://gleidsomoliver-cell.github.io/PromoFinder/favoritos.html" />
+    <script src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body data-page="favorites">
+    <header class="header">
+      <div class="container header-container">
+        <a href="index.html" class="logo">
+          <div class="logo-icon"><i data-lucide="tag"></i></div>
+          <h2>Promo<span>Finder</span></h2>
+        </a>
+
+        <button class="mobile-menu-btn" type="button" title="Abrir menu" aria-label="Abrir menu" aria-controls="primary-navigation" aria-expanded="false">
+          <i data-lucide="menu"></i>
+        </button>
+
+        <nav class="menu" id="primary-navigation">
+          <a href="index.html">Início</a>
+          <a href="index.html#categorias">Categorias</a>
+          <a href="lojas.html">Lojas</a>
+          <a href="cupons.html">Cupons</a>
+        </nav>
+
+        <div class="header-actions">
+          <button id="theme-btn" class="icon-btn" title="Alternar Tema">
+            <i data-lucide="moon"></i>
+          </button>
+          <a href="favoritos.html" class="icon-btn favorites-btn" title="Favoritos" aria-current="page">
+            <i data-lucide="heart"></i>
+            <span>Favoritos</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content container">
+      <section class="offers-section">
+        <div class="offers-header"><h1>Minhas ofertas favoritas</h1></div>
+        <div class="offers-grid" id="offers-grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-container">
+        <div class="footer-col main-col">
+          <div class="logo">
+            <div class="logo-icon"><i data-lucide="tag"></i></div>
+            <h2>Promo<span>Finder</span></h2>
+          </div>
+          <p>O seu agregador de ofertas inteligente. Encontre descontos e economize em todas as suas compras online.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="lojas.html">Lojas com Ofertas</a></li>
+            <li><a href="cupons.html">Cupons de Desconto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="termos.html">Termos de Uso</a></li>
+            <li><a href="privacidade.html">Política de Privacidade</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom container">
+        <p class="affiliate-disclosure">Transparência: O PromoFinder participa de programas de afiliados. Podemos receber uma comissão por compras realizadas através de alguns links, sem custo adicional para você.</p>
+        <p>&copy; 2026 PromoFinder. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="js/offers-data.js"></script>
+    <script src="js/favorites-utils.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

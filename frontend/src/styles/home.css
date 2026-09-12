@@ -1,0 +1,9 @@
+.main-content { display: flex; gap: 30px; padding: 50px 0; scroll-margin-top: 90px; }
+.sidebar { width: 260px; flex-shrink: 0; }
+.offers-section { flex: 1; min-width: 0; }
+.offers-section > h2 { font-size: 24px; margin-bottom: 24px; }
+@media (max-width: 1024px) {
+  .main-content { flex-direction: column; }
+  .sidebar { width: 100%; }
+}
+@media (max-width: 768px) { .sidebar { display: none; } }

@@ -1,179 +1,178 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PromoFinder | Ofertas e cupons em um só lugar</title>
-    <meta name="description" content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
-    <link rel="canonical" href="https://gleidsomoliver-cell.github.io/PromoFinder/" />
-    <meta property="og:title" content="PromoFinder | Ofertas e cupons em um só lugar" />
-    <meta property="og:description" content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://gleidsomoliver-cell.github.io/PromoFinder/" />
-   <script src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <header class="header">
-      <div class="container header-container">
-        <a href="index.html" class="logo">
-          <div class="logo-icon">
-            <i data-lucide="tag"></i>
-          </div>
-          <h2>Promo<span>Finder</span></h2>
-        </a>
 
-        <button class="mobile-menu-btn" type="button" title="Abrir menu" aria-label="Abrir menu" aria-controls="primary-navigation" aria-expanded="false">
-          <i data-lucide="menu"></i>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromoFinder | Ofertas e cupons em um só lugar</title>
+  <meta name="description" content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
+  <link rel="canonical" href="https://gleidsomoliver-cell.github.io/PromoFinder/" />
+  <meta property="og:title" content="PromoFinder | Ofertas e cupons em um só lugar" />
+  <meta property="og:description"
+    content="Encontre ofertas, descontos e cupons de lojas online reunidos pelo PromoFinder." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gleidsomoliver-cell.github.io/PromoFinder/" />
+  <script src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <i data-lucide="tag"></i>
+        </div>
+        <h2>Promo<span>Finder</span></h2>
+      </a>
+
+      <button class="mobile-menu-btn" type="button" title="Abrir menu" aria-label="Abrir menu"
+        aria-controls="primary-navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <nav class="menu" id="primary-navigation">
+        <a href="index.html" class="active">Início</a>
+        <a href="#categorias">Categorias</a>
+        <a href="lojas.html">Lojas</a>
+        <a href="cupons.html">Cupons</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-btn" class="icon-btn" title="Alternar Tema">
+          <i data-lucide="moon"></i>
         </button>
 
-        <nav class="menu" id="primary-navigation">
-          <a href="index.html" class="active">Início</a>
-          <a href="#categorias">Categorias</a>
-          <a href="lojas.html">Lojas</a>
-          <a href="cupons.html">Cupons</a>
-        </nav>
+        <a href="favoritos.html" class="icon-btn favorites-btn" title="Favoritos">
+          <i data-lucide="heart"></i>
+          <span>Favoritos</span>
+        </a>
 
-        <div class="header-actions">
-          <button id="theme-btn" class="icon-btn" title="Alternar Tema">
-            <i data-lucide="moon"></i>
-          </button>
+      </div>
+    </div>
+  </header>
 
-          <button class="icon-btn favorites-btn" title="Favoritos">
-            <i data-lucide="heart"></i>
-            <span>Favoritos</span>
-          </button>
+  <section class="hero">
+    <div class="container hero-container">
+      <div class="hero-text">
+        <span class="badge">
+          <i data-lucide="flame"></i>
+          Promoções Atualizadas Todos os Dias
+        </span>
 
+        <h1>
+          Encontre as melhores
+          <span>promoções</span>
+          em um só lugar!
+        </h1>
+
+        <p>
+          Buscamos nas principais lojas para você economizar tempo e dinheiro.
+          Aproveite as ofertas do dia, cupons exclusivos e os menores preços.
+        </p>
+
+        <div class="search-box">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" placeholder="Digite o produto que você procura..." />
+          <button>Buscar</button>
+        </div>
+
+        <div class="beneficios">
+          <div><i data-lucide="store"></i> As melhores lojas</div>
+          <div><i data-lucide="sparkles"></i> Menor preço</div>
+          <div><i data-lucide="zap"></i> Ofertas atualizadas</div>
+          <div><i data-lucide="shield-check"></i> 100% Gratuito</div>
         </div>
       </div>
-    </header>
 
-    <section class="hero">
-      <div class="container hero-container">
-        <div class="hero-text">
-          <span class="badge">
-            <i data-lucide="flame"></i>
-            Promoções Atualizadas Todos os Dias
-          </span>
-
-          <h1>
-            Encontre as melhores
-            <span>promoções</span>
-            em um só lugar!
-          </h1>
-
-          <p>
-            Buscamos nas principais lojas para você economizar tempo e dinheiro.
-            Aproveite as ofertas do dia, cupons exclusivos e os menores preços.
-          </p>
-
-          <div class="search-box">
-            <i data-lucide="search" class="search-icon"></i>
-            <input
-              type="text"
-              placeholder="Digite o produto que você procura..."
-            />
-            <button>Buscar</button>
-          </div>
-
-          <div class="beneficios">
-            <div><i data-lucide="store"></i> As melhores lojas</div>
-            <div><i data-lucide="sparkles"></i> Menor preço</div>
-            <div><i data-lucide="zap"></i> Ofertas atualizadas</div>
-            <div><i data-lucide="shield-check"></i> 100% Gratuito</div>
-          </div>
-        </div>
-
-        <div class="hero-image">
-          <img
-            src="imagens/carrinho.png"
-            alt="Carrinho de Ofertas PromoFinder"
-          />
-        </div>
+      <div class="hero-image">
+        <img src="imagens/carrinho.png" alt="Carrinho de Ofertas PromoFinder" />
       </div>
+    </div>
+  </section>
+
+  <main class="main-content container" id="categorias">
+    <aside class="sidebar">
+      <div class="card-categories">
+        <h3>Categorias</h3>
+        <ul class="category-list">
+          <li>
+            <a href="#" class="active"><i data-lucide="tv"></i> Eletrônicos</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="laptop"></i> Informática</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="smartphone"></i> Celulares</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="home"></i> Casa e Decoração</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="shirt"></i> Moda</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="sparkles"></i> Beleza e Saúde</a>
+          </li>
+          <li>
+            <a href="#"><i data-lucide="dumbbell"></i> Esportes</a>
+          </li>
+        </ul>
+        <button class="btn-all-categories">Ver todas</button>
+      </div>
+    </aside>
+
+    <section class="offers-section">
+      <div class="offers-header">
+        <h2>Ofertas em destaque 🔥</h2>
+      </div>
+
+      <div class="offers-grid" id="offers-grid"></div>
+      <p class="no-results" id="no-results" role="status" hidden>Nenhuma oferta encontrada.</p>
     </section>
+  </main>
 
-    <main class="main-content container" id="categorias">
-      <aside class="sidebar">
-        <div class="card-categories">
-          <h3>Categorias</h3>
-          <ul class="category-list">
-            <li>
-              <a href="#" class="active"
-                ><i data-lucide="tv"></i> Eletrônicos</a
-              >
-            </li>
-            <li>
-              <a href="#"><i data-lucide="laptop"></i> Informática</a>
-            </li>
-            <li>
-              <a href="#"><i data-lucide="smartphone"></i> Celulares</a>
-            </li>
-            <li>
-              <a href="#"><i data-lucide="home"></i> Casa e Decoração</a>
-            </li>
-            <li>
-              <a href="#"><i data-lucide="shirt"></i> Moda</a>
-            </li>
-            <li>
-              <a href="#"><i data-lucide="sparkles"></i> Beleza e Saúde</a>
-            </li>
-            <li>
-              <a href="#"><i data-lucide="dumbbell"></i> Esportes</a>
-            </li>
-          </ul>
-          <button class="btn-all-categories">Ver todas</button>
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-col main-col">
+        <div class="logo">
+          <div class="logo-icon"><i data-lucide="tag"></i></div>
+          <h2>Promo<span>Finder</span></h2>
         </div>
-      </aside>
-
-      <section class="offers-section">
-        <div class="offers-header">
-          <h2>Ofertas em destaque 🔥</h2>
-        </div>
-
-        <div class="offers-grid" id="offers-grid"></div>
-        <p class="no-results" id="no-results" role="status" hidden>Nenhuma oferta encontrada.</p>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="container footer-container">
-        <div class="footer-col main-col">
-          <div class="logo">
-            <div class="logo-icon"><i data-lucide="tag"></i></div>
-            <h2>Promo<span>Finder</span></h2>
-          </div>
-          <p>
-            O seu agregador de ofertas inteligente. Encontre descontos e
-            economize em todas as suas compras online.
-          </p>
-        </div>
-
-        <div class="footer-col">
-          <h4>Navegação</h4>
-          <ul>
-            <li><a href="index.html">Início</a></li>
-            <li><a href="lojas.html">Lojas com Ofertas</a></li>
-            <li><a href="cupons.html">Cupons de Desconto</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="termos.html">Termos de Uso</a></li>
-            <li><a href="privacidade.html">Política de Privacidade</a></li>
-          </ul>
-        </div>
+        <p>
+          O seu agregador de ofertas inteligente. Encontre descontos e
+          economize em todas as suas compras online.
+        </p>
       </div>
 
-      <div class="footer-bottom container">
-        <p class="affiliate-disclosure">Transparência: O PromoFinder participa de programas de afiliados. Podemos receber uma comissão por compras realizadas através de alguns links, sem custo adicional para você.</p>
-        <p>&copy; 2026 PromoFinder. Todos os direitos reservados.</p>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="lojas.html">Lojas com Ofertas</a></li>
+          <li><a href="cupons.html">Cupons de Desconto</a></li>
+        </ul>
       </div>
-    </footer>
 
-    <script src="js/offers-data.js"></script>
-    <script src="js/script.js"></script>
-  </body>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="termos.html">Termos de Uso</a></li>
+          <li><a href="privacidade.html">Política de Privacidade</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom container">
+      <p class="affiliate-disclosure">Transparência: O PromoFinder participa de programas de afiliados. Podemos receber
+        uma comissão por compras realizadas através de alguns links, sem custo adicional para você.</p>
+      <p>&copy; 2026 PromoFinder. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/offers-data.js"></script>
+  <script src="js/favorites-utils.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
 </html>

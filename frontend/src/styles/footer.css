@@ -1,0 +1,14 @@
+.footer { background: var(--surface); padding: 60px 0 20px; margin-top: 60px; }
+.footer-container { display: grid; grid-template-columns: minmax(0,2fr) repeat(2,minmax(0,1fr)); gap: 30px; }
+.footer-col { min-width: 0; }
+.footer-col h2 { color: var(--text); font-size: 16px; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 10px; }
+.footer-col p, .footer-col li a { color: var(--muted); text-decoration: none; font-size: 14px; }
+.footer-col li a:hover { color: var(--accent); }
+.footer-bottom { border-top: 1px solid var(--border); margin-top: 30px; padding-top: 20px; }
+.footer-bottom p { color: var(--muted); font-size: 14px; text-align: center; }
+.footer-bottom .affiliate-disclosure { max-width: 860px; margin: 0 auto 12px; font-size: 13px; line-height: 1.6; }
+.light-mode .footer { background: #E4E4E7; }
+@media (max-width: 900px) { .footer-container { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 600px) { .footer-container { grid-template-columns: minmax(0,1fr); } }

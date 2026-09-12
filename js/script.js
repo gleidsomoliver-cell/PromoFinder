@@ -4,6 +4,7 @@ const OFFERS_API_TIMEOUT_MS = 8000;
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. DADOS E INTERFACE DE OFERTAS
     const offersGrid = document.getElementById('offers-grid');
+    const isFavoritesPage = document.body.dataset.page === 'favorites';
 
     function escapeHtml(value) {
         if (value === null || value === undefined) return '';
@@ -34,13 +35,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         return typeof url === 'string' && /^https?:\/\//i.test(url) ? url : '#';
     }
 
+    function formatPriceVerification(lastVerifiedAt) {
+        const verifiedAt = new Date(lastVerifiedAt);
+        if (!Number.isFinite(verifiedAt.getTime())) return 'Oferta no Mercado Livre';
+
+        const now = new Date();
+        const time = verifiedAt.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const isToday = verifiedAt.getFullYear() === now.getFullYear()
+            && verifiedAt.getMonth() === now.getMonth()
+            && verifiedAt.getDate() === now.getDate();
+
+        if (isToday) return `Preço verificado hoje às ${time}`;
+
+        const date = verifiedAt.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit'
+        });
+        return `Preço verificado em ${date} às ${time}`;
+    }
+
     function renderOffers(offersToRender) {
         if (!offersGrid) return;
 
         if (offersToRender.length === 0) {
+            const emptyMessage = isFavoritesPage
+                ? 'Você ainda não adicionou nenhuma oferta aos favoritos.'
+                : 'Nenhuma oferta disponível no momento. Estamos atualizando as melhores promoções.';
             offersGrid.innerHTML = `
                 <p class="no-results empty-offers" role="status">
-                    Nenhuma oferta disponível no momento. Estamos atualizando as melhores promoções.
+                    ${emptyMessage}
                 </p>
             `;
             return;
@@ -71,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <span class="current-price">${escapeHtml(offer.price)}</span>
                                 <span class="old-price">${escapeHtml(offer.oldPrice)}</span>
                             </div>
-                            <span class="price-label">Menor preço encontrado</span>
+                            <span class="price-label">${escapeHtml(formatPriceVerification(offer.lastVerifiedAt))}</span>
                         </div>
                         <a href="${escapeHtml(offerUrl)}" class="btn-offer" target="_blank" rel="noopener noreferrer">
                             Ver oferta <i data-lucide="external-link"></i>
@@ -84,6 +110,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function getLocalOffers() {
         return Array.isArray(window.PromoFinderOffers) ? window.PromoFinderOffers : [];
+    }
+
+    function getVisibleOffers(offers) {
+        if (!isFavoritesPage) return offers;
+        return window.PromoFinderFavorites.filterFavoriteOffers(offers, getStoredFavorites());
     }
 
     async function loadOffers() {
@@ -105,12 +136,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error('Formato de ofertas inesperado');
             }
 
-            renderOffers(offers);
+            renderOffers(getVisibleOffers(offers));
         } catch (error) {
             const localOffers = getLocalOffers();
 
             console.warn('A API de ofertas não respondeu. Os dados locais foram utilizados como fallback.', error);
-            renderOffers(localOffers);
+            renderOffers(getVisibleOffers(localOffers));
         } finally {
             clearTimeout(requestTimeout);
         }
@@ -145,9 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const storedFavorites = JSON.parse(localStorage.getItem('favorites'));
 
-            return Array.isArray(storedFavorites)
-                ? [...new Set(storedFavorites.filter(item => typeof item === 'string'))]
-                : [];
+            return window.PromoFinderFavorites.normalizeFavoriteIds(storedFavorites);
         } catch (error) {
             return [];
         }
@@ -205,10 +234,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (isFavorited) {
                     favorites.push(favoriteKey);
                 } else {
-                    favorites = favorites.filter(item => item !== favoriteKey && item !== productName);
+                    favorites = window.PromoFinderFavorites.removeFavoriteId(
+                        favorites,
+                        favoriteKey,
+                        productName
+                    );
                 }
 
                 localStorage.setItem('favorites', JSON.stringify(favorites));
+
+                if (!isFavorited && isFavoritesPage) {
+                    productCard.remove();
+                    if (!offersGrid.querySelector('.product-card')) renderOffers([]);
+                }
                 updateFavorites();
             });
         });

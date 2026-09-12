@@ -3,6 +3,8 @@ const OPTIONAL_FIELDS = [
     'discount',
     'productUrl',
     'affiliateUrl',
+    'referencePrice',
+    'referencePriceCapturedAt',
     'source',
     'lastVerifiedAt',
     'couponCode',

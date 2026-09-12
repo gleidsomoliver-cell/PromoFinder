@@ -2,7 +2,6 @@ const http = require('node:http');
 const crypto = require('node:crypto');
 const localOffersAdapter = require('./adapters/localOffersAdapter.js');
 const manualAffiliateOffersAdapter = require('./adapters/manualAffiliateOffersAdapter.js');
-const mercadoLivreOffersAdapter = require('./adapters/mercadoLivreOffersAdapter.js');
 const {
     diagnoseCategoriesHighlights
 } = require('./diagnostics/mercadoLivreHighlightsDiagnostic.js');
@@ -165,8 +164,8 @@ const server = http.createServer(async (request, response) => {
 
         if (request.method === 'GET' && requestUrl.pathname === '/api/offers') {
             const offers = await getOffersWithFallback(
-                [mercadoLivreOffersAdapter],
-                [manualAffiliateOffersAdapter, localOffersAdapter]
+                [manualAffiliateOffersAdapter],
+                [localOffersAdapter]
             );
 
             sendJson(response, 200, offers);

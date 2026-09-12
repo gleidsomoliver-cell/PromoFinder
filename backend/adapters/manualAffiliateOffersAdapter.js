@@ -1,9 +1,9 @@
 const {
-    manualAffiliateOffers
+    listPublishableManualAffiliateOffers
 } = require('../data/manualAffiliateOffers.js');
 
 async function getOffers() {
-    return manualAffiliateOffers;
+    return listPublishableManualAffiliateOffers();
 }
 
 module.exports = {

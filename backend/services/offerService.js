@@ -1,4 +1,5 @@
 const { normalizeOffer } = require('../utils/normalizeOffer.js');
+const { isAffiliatePriceVerified } = require('../utils/priceVerification.js');
 
 async function getOffers(adapters) {
     const offersBySource = await Promise.all(
@@ -8,7 +9,8 @@ async function getOffers(adapters) {
     return offersBySource
         .flat()
         .map(normalizeOffer)
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter(offer => isAffiliatePriceVerified(offer));
 }
 
 async function getOffersWithFallback(primaryAdapters, fallbackAdapters) {
